@@ -9,7 +9,7 @@ void lemlib::Chassis::moveToPose(float x, float y, float theta, int timeout, Mov
     // take the mutex
     this->requestMotionStart();
     // were all motions cancelled?
-    if (!this->motionRunning) return;
+    if (!this->motionRunning) {printf("fdksf\n"); return;};
     // if the function is async, run it in a new task
     if (async) {
         pros::Task task([&]() { moveToPose(x, y, theta, timeout, params, false); });

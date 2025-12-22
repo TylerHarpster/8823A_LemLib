@@ -1,63 +1,83 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "api.h"
+#include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/adi.hpp"
+#include "pros/misc.h"
+#include "pros/rtos.hpp"
+#include <cstdio>
 
 // controller
+
+
+int wingState=0;
+int tongueState=0;
+
+
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 pros::MotorGroup leftMotors({13, -12, 11}); // left motors on ports 1, 2, 3
 pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
+pros::MotorGroup lemrightMotors({20, -19, 18}); // right motors on ports 4, 5, 6
+
+pros::Motor UpperIntake(10);
+pros::Motor MiddleIntake(-1);
+pros::Motor LowerIntake(14);
+pros::adi::DigitalOut wingPiston('B');
+pros::adi::DigitalOut tonguePiston('A');
+
 
 // create an imu on port 10
 pros::Imu imu(15);
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
-pros::Rotation horizontalEnc(5);
+pros::Rotation horizontalEnc(9);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
-pros::Rotation verticalEnc(9);
+pros::Rotation leftEnc(-5);
+pros::Rotation rightEnc(4);
 // horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -5.75);
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -4.5);
 // vertical tracking wheel. 2.75" diameter, 2.5" offset, left of the robot (negative)
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_275, -2.5);
+lemlib::TrackingWheel right(&rightEnc, lemlib::Omniwheel::NEW_275, 5.25);
+lemlib::TrackingWheel left(&leftEnc, lemlib::Omniwheel::NEW_275, -5.25);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
-                              &rightMotors, // right motor group
-                              10, // 10 inch track width
-                              lemlib::Omniwheel::NEW_4, // using new 4" omnis
-                              360, // drivetrain rpm is 360
+                              &lemrightMotors, // right motor group
+                              10.5, // 10 inch track width
+                              lemlib::Omniwheel::NEW_275, // using new 4" omnis
+                              600, // drivetrain rpm is 360
                               2 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(10, // proportional gain (kP)
+lemlib::ControllerSettings linearcontroller(10, // proportional gain (kP)
                                             0, // integral gain (kI)
                                             3, // derivative gain (kD)
-                                            3, // anti windup
-                                            1, // small error range, in inches
+                                            0, // anti windup
+                                            0, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
-                                            3, // large error range, in inches
+                                            0, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
-                                            20 // maximum acceleration (slew)
+                                            5 // maximum acceleration (slew)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(2, // proportional gain (kP)
-                                             0, // integral gain (kI)
+lemlib::ControllerSettings angularcontroller(2, // proportional gain (kP)
+                                             0, //                67
                                              10, // derivative gain (kD)
-                                             3, // anti windup
-                                             1, // small error range, in degrees
+                                             0, // anti windup
+                                             .5, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
-                                             3, // large error range, in degrees
+                                             1, // large error range, in degrees
                                              500, // large error range timeout, in milliseconds
                                              0 // maximum acceleration (slew)
 );
 
 // sensors for odometry
-lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
-                            nullptr, // vertical tracking wheel 2, set to nullptr as we don't have a second one
+lemlib::OdomSensors sensors(&right, // vertical tracking wheel
+                            &left, // vertical tracking wheel 2, set to nullptr as we don't have a second one
                             &horizontal, // horizontal tracking wheel
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
                             &imu // inertial sensor
@@ -76,7 +96,7 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 );
 
 // create the chassis
-lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
+lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -121,7 +141,7 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-// get a path used for pure pursuit
+// get a path used for pure pursuit 
 
 // this needs to be put outside a function
 ASSET(example_txt); // '.' replaced with "_" to make c++ happy
@@ -131,7 +151,30 @@ ASSET(example_txt); // '.' replaced with "_" to make c++ happy
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
+
 void autonomous() {
+    // chassis.turnToHeading(90, 980990909090);
+    pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    
+    /*
+x -1.035869   y -30.486217   t 4.014997
+x -9.735420   y -34.673637   t 78.631584
+x 30.589226   y -29.712183   t 214.523605
+x 35.901657   y -22.420971   t 213.004639
+x 21.707937   y -45.638882   t 213.005951
+
+    */
+    chassis.setPose(0,0,0);
+
+    chassis.moveToPose(-1.035869, -30.486217, 4.014997,9999,{.maxSpeed=50});
+    chassis.moveToPose(-9.735420, -34.673637, 78.631584,9999,{.maxSpeed=50});
+    chassis.moveToPose(30.589226, -29.712183, 214.523605,9999,{.maxSpeed=50});
+    chassis.moveToPose(35.901657, -22.420971, 213.004639,9999,{.maxSpeed=50});
+    chassis.moveToPose(21.707937, -45.638882, 213.005951,9999,{.maxSpeed=50});
+
+    pros::delay(10000000);
+   std::printf("SAFFJFASFJFD\n");
+    
     // Move to x: 20 and y: 15, and face heading 90. Timeout set to 4000 ms
     chassis.moveToPose(20, 15, 90, 4000);
     // Move to x: 0 and y: 0 and face heading 270, going backwards. Timeout set to 4000ms
@@ -166,13 +209,81 @@ void autonomous() {
 void opcontrol() {
     // controller
     // loop to continuously update motors
+
+    chassis.cancelAllMotions();
+    chassis.setPose(0,0,0);
     while (true) {
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        chassis.arcade(leftY, rightX);
+        		float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
+		float j3=controller.get_analog(ANALOG_LEFT_Y);
+
+		leftMotors.move(j3+j1);
+		rightMotors.move(j3-j1);
+
+        
+
+        if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_POWER)){
+            std::printf("x %f   y %f   t %f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta);
+        }
         // delay to save resources
-        pros::delay(10);
+        
+        if(controller.get_digital_new_press(DIGITAL_Y)){wingPiston.set_value(wingState++%2);}
+		if(controller.get_digital_new_press(DIGITAL_B)){tonguePiston.set_value(tongueState++%2);}
+				//storage
+		if(controller.get_digital(DIGITAL_R1)){
+			LowerIntake.move(94*0.5);
+			MiddleIntake.move(63*0.5);
+			UpperIntake.move(-63);
+		}
+	
+		if(controller.get_digital_new_release(DIGITAL_R1)){
+			MiddleIntake.brake();
+			UpperIntake.brake();
+		}
+
+		//move blocks up
+		if(controller.get_digital(DIGITAL_L1)){
+			LowerIntake.move(94*0.5);
+			MiddleIntake.move(127*0.5);
+			UpperIntake.move(127);
+		}
+
+		//move blocks down
+		if(controller.get_digital(DIGITAL_R2)){
+			LowerIntake.move(-31*0.5);
+			MiddleIntake.move(-63*0.5);
+			UpperIntake.move(-63);
+		}
+
+		//middle goal
+		if(controller.get_digital(DIGITAL_L2)){
+			LowerIntake.move(63*0.5);
+			MiddleIntake.move(94*0.5);
+			UpperIntake.move(-106);
+		}
+
+		//un-middle goal
+		if(controller.get_digital(DIGITAL_X)){
+			LowerIntake.move(-63*0.5);
+			MiddleIntake.move(-94*0.5);
+			UpperIntake.move(106);
+		}
+
+		//unstucky
+		if(controller.get_digital(DIGITAL_DOWN)){
+			LowerIntake.move(-127*0.5);
+			MiddleIntake.move(127*0.5);
+		}
+
+		if(controller.get_digital(DIGITAL_RIGHT)){
+			MiddleIntake.brake();
+			LowerIntake.brake();
+			UpperIntake.brake();
+		}
+
+        pros::delay(50);
     }
 }
