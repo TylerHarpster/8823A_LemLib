@@ -16,12 +16,14 @@ int tongueState=0;
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({-13, 12, -11}); // left motors on ports 1, 2, 3
-pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
-pros::MotorGroup lemrightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
+pros::MotorGroup leftMotors({-13, 12}); // left motors on ports 1, 2, 3
+pros::MotorGroup rightMotors({-20, 19,}); // right motors on ports 4, 5, 6
+pros::MotorGroup lemrightMotors({-20, 19,}); // right motors on ports 4, 5, 6
 
 pros::Motor UpperIntake(10);
 pros::Motor MiddleIntake(-1);
+pros::Motor MiddleIntakeHar3(11);
+pros::Motor MiddleIntakeTuaj(-18);
 pros::Motor LowerIntake(14);
 pros::adi::DigitalOut wingPiston('B');
 pros::adi::DigitalOut tonguePiston('A');
@@ -222,6 +224,14 @@ void opcontrol() {
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
     while (true) {
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
+            MiddleIntakeHar3.move(127);
+            MiddleIntakeTuaj.move(127);
+        }
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
+            MiddleIntakeHar3.move(-127);
+            MiddleIntakeTuaj.move(-127);
+        }
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
