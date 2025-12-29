@@ -52,9 +52,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearcontroller(3, // proportional gain (kP)
+lemlib::ControllerSettings linearcontroller(2, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            0, // derivative gain (kD)
+                                            10, // derivative gain (kD)
                                             0, // anti windup
                                             0, // small error range, in inches,
                                             100, // small error range timeout, in milliseconds
@@ -164,9 +164,9 @@ x 35.901657   y -22.420971   t 213.004639
 x 21.707937   y -45.638882   t 213.005951
 
     */
-    chassis.setPose(0,0,0,0);
+    chassis.setPose(0,0,0);
 
-    chassis.moveToPose(0, -30.486217, 0, 9999,{.forwards=true,.maxSpeed=50});
+    chassis.moveToPose(0, -30, 0, 9999,{.forwards=true,.maxSpeed=50});
     //pros::delay(3000);
 
     /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
