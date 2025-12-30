@@ -17,7 +17,7 @@ int tongueState=0;
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 pros::MotorGroup leftMotors({13, -12, 11}); // left motors on ports 1, 2, 3
-pros::MotorGroup rightMotors({20, -19, 18}); // right motors on ports 4, 5, 6
+pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
 pros::MotorGroup lemrightMotors({20, -19, 18}); // right motors on ports 4, 5, 6
 
 pros::Motor UpperIntake(10);
@@ -100,6 +100,41 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
 
+
+void turnToHeading(float angle){
+  int top_speed = 45;
+  float speed;
+  float sumError = 0;
+  float error = 999;
+  float Kp = 0.3;
+  double Ki = 0.038;
+
+  double startingRot=chassis.getPose().theta;
+
+  while (fabs (error) > 0.55){
+    printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
+    
+    error = angle - (chassis.getPose().theta-startingRot);
+    if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
+    speed = Kp*error + Ki*sumError; // slows down as it approaches destination
+
+    if(speed > top_speed) speed = top_speed; // doesn't get too fast
+    if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
+
+    leftMotors.move(speed);
+    rightMotors.move(-speed);
+    pros::delay(20);
+  }
+  leftMotors.brake();
+  rightMotors.brake();
+
+}
+
+void turnToPoint(){
+
+}
+
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -171,6 +206,8 @@ x 21.707937   y -45.638882   t 213.005951
     chassis.moveToPose(0, -30, 0, 9999,{.forwards=true,.maxSpeed=50});
     //pros::delay(3000);
 
+    chassis.follow(example_txt, 15, 4000, false);
+
     /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
     chassis.moveToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
     pros::delay(3000);
@@ -200,7 +237,7 @@ x 21.707937   y -45.638882   t 213.005951
     // Follow the path in path.txt. Lookahead at 15, Timeout set to 4000
     // following the path with the back of the robot (forwards = false)
     // see line 116 to see how to define a path
-    chassis.follow(example_txt, 15, 4000, false);
+    
     // wait until the chassis has traveled 10 inches. Otherwise the code directly after
     // the movement will run immediately
     // Unless its another movement, in which case it will wait
