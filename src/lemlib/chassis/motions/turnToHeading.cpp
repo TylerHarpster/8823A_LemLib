@@ -74,7 +74,7 @@ void lemlib::Chassis::turnToHeading(float theta, int timeout, TurnToHeadingParam
 
         // move the drivetrain
         drivetrain.leftMotors->move(motorPower);
-        drivetrain.rightMotors->move(-motorPower);
+        drivetrain.rightMotors->move(motorPower);
 
         pros::delay(10);
     }
