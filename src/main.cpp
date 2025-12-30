@@ -204,12 +204,10 @@ x 21.707937   y -45.638882   t 213.005951
     chassis.setPose(0,0,0);
 
     chassis.moveToPose(0, 30, 0, 9999);
-    pros::delay(3000);
-    chassis.turnToHeading(90, 9999);
+    // pros::delay(3000);
+    // chassis.turnToHeading(90, 9999);
 
     // chassis.follow(tuah_txt, 15, 4000, false);
-
-    // chassis.follow(example_txt, 15, 4000, false);
 
     /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
     chassis.moveToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
