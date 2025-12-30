@@ -122,7 +122,7 @@ void turnToHeading(float angle){
     if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
 
     leftMotors.move(speed);
-    rightMotors.move(-speed);
+    rightMotors.move(speed);
     pros::delay(20);
   }
   leftMotors.brake();
@@ -206,7 +206,7 @@ x 21.707937   y -45.638882   t 213.005951
     chassis.moveToPose(0, 30, 0, 9999,{.forwards=true,.maxSpeed=50});
     pros::delay(3000);
     chassis.turnToHeading(90, 9999);
-    // chassis.moveToPose(0, 30, 0, 9999);
+    chassis.moveToPose(0, 30, 0, 9999);
 
     // chassis.follow(tuah_txt, 15, 4000, false);
 
