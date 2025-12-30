@@ -54,9 +54,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearcontroller(2, // proportional gain (kP)
+lemlib::ControllerSettings linearcontroller(0.25, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            10, // derivative gain (kD)
+                                            2, // derivative gain (kD)
                                             0, // anti windup
                                             0, // small error range, in inches,
                                             100, // small error range timeout, in milliseconds
@@ -68,12 +68,12 @@ lemlib::ControllerSettings linearcontroller(2, // proportional gain (kP)
 // angular motion controller
 lemlib::ControllerSettings angularcontroller(2, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             12, // derivative gain (kD)
+                                             5, // derivative gain (kD)
                                              0, // anti windup
-                                             .5, // small error range, in degrees
-                                             100, // small error range timeout, in milliseconds
-                                             1, // large error range, in degrees
-                                             500, // large error range timeout, in milliseconds
+                                             0, // small error range, in degrees
+                                             0, // small error range timeout, in milliseconds
+                                             0, // large error range, in degrees
+                                             0, // large error range timeout, in milliseconds
                                              0 // maximum acceleration (slew)
 );
 
@@ -181,7 +181,7 @@ void competition_initialize() {}
 // get a path used for pure pursuit 
 
 // this needs to be put outside a function
-ASSET(example_txt); // '.' replaced with "_" to make c++ happy
+ASSET(tuah_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -203,8 +203,12 @@ x 21.707937   y -45.638882   t 213.005951
     */
     chassis.setPose(0,0,0);
 
-    chassis.moveToPose(0, -30, 0, 9999,{.forwards=true,.maxSpeed=50});
-    //pros::delay(3000);
+    // chassis.moveToPose(0, -30, 0, 9999,{.forwards=true,.maxSpeed=50});
+    // pros::delay(3000);
+    chassis.turnToHeading(90, 9999);
+    // chassis.moveToPose(0, 30, 0, 9999);
+
+    // chassis.follow(tuah_txt, 15, 4000, false);
 
     chassis.follow(example_txt, 15, 4000, false);
 
@@ -270,8 +274,8 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        		float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
-		float j3=controller.get_analog(ANALOG_LEFT_Y);
+        		float j1=0.5*controller.get_analog(ANALOG_LEFT_Y);
+		float j3=controller.get_analog(ANALOG_RIGHT_X);
 
 		leftMotors.move(j3+j1);
 		rightMotors.move(j3-j1);
