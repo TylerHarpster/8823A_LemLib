@@ -17,7 +17,7 @@ int tongueState=0;
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 pros::MotorGroup leftMotors({-13, 12, -11}); // left motors on ports 1, 2, 3
-pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
+pros::MotorGroup rightMotors({20, -19, 18}); // right motors on ports 4, 5, 6
 pros::MotorGroup lemrightMotors({20, -19, 18}); // right motors on ports 4, 5, 6
 
 pros::Motor UpperIntake(10);
@@ -206,7 +206,6 @@ x 21.707937   y -45.638882   t 213.005951
     chassis.moveToPose(0, 30, 0, 9999,{.forwards=true,.maxSpeed=50});
     pros::delay(3000);
     chassis.turnToHeading(90, 9999);
-    chassis.moveToPose(0, 30, 0, 9999);
 
     // chassis.follow(tuah_txt, 15, 4000, false);
 
