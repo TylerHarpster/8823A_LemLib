@@ -284,9 +284,9 @@ void lemlib::Chassis::follow(const asset& path, float lookahead, int timeout, bo
         // move the drivetrain
         if (forwards) {
             drivetrain.leftMotors->move(-targetLeftVel);
-            drivetrain.rightMotors->move(targetRightVel);
+            drivetrain.rightMotors->move(-targetRightVel);
         } else {
-            drivetrain.leftMotors->move(targetRightVel);
+            drivetrain.leftMotors->move(-targetRightVel);
             drivetrain.rightMotors->move(-targetLeftVel);
         }
 
