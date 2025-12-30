@@ -16,7 +16,7 @@ int tongueState=0;
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({13, -12, 11}); // left motors on ports 1, 2, 3
+pros::MotorGroup leftMotors({-13, 12, -11}); // left motors on ports 1, 2, 3
 pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
 pros::MotorGroup lemrightMotors({20, -19, 18}); // right motors on ports 4, 5, 6
 
@@ -203,14 +203,14 @@ x 21.707937   y -45.638882   t 213.005951
     */
     chassis.setPose(0,0,0);
 
-    // chassis.moveToPose(0, -30, 0, 9999,{.forwards=true,.maxSpeed=50});
-    // pros::delay(3000);
+    chassis.moveToPose(0, 30, 0, 9999,{.forwards=true,.maxSpeed=50});
+    pros::delay(3000);
     chassis.turnToHeading(90, 9999);
     // chassis.moveToPose(0, 30, 0, 9999);
 
     // chassis.follow(tuah_txt, 15, 4000, false);
 
-    chassis.follow(example_txt, 15, 4000, false);
+    // chassis.follow(example_txt, 15, 4000, false);
 
     /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
     chassis.moveToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
@@ -274,8 +274,8 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        		float j1=0.5*controller.get_analog(ANALOG_LEFT_Y);
-		float j3=controller.get_analog(ANALOG_RIGHT_X);
+        		float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
+		float j3=controller.get_analog(ANALOG_LEFT_Y);
 
 		leftMotors.move(j3+j1);
 		rightMotors.move(j3-j1);
