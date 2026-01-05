@@ -16,9 +16,8 @@ int tongueState=0;
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({-13, 12, -11}); // left motors on ports 1, 2, 3
+pros::MotorGroup leftMotors({13, -12, 11}); // left motors on ports 1, 2, 3
 pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
-pros::MotorGroup lemrightMotors({20, -19, 18}); // right motors on ports 4, 5, 6
 
 pros::Motor UpperIntake(10);
 pros::Motor MiddleIntake(-1);
@@ -46,7 +45,7 @@ lemlib::TrackingWheel left(&leftEnc, lemlib::Omniwheel::NEW_275, -5.25);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
-                              &lemrightMotors, // right motor group
+                              &rightMotors, // right motor group
                               10.5, // 10 inch track width
                               lemlib::Omniwheel::NEW_275, // using new 4" omnis
                               600, // drivetrain rpm is 360
@@ -54,26 +53,26 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearcontroller(0.25, // proportional gain (kP)
+lemlib::ControllerSettings linearcontroller(6, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            2, // derivative gain (kD)
+                                            7, // derivative gain (kD)
                                             0, // anti windup
-                                            0, // small error range, in inches,
+                                            0.25, // small error range, in inches,
                                             100, // small error range timeout, in milliseconds
-                                            0, // large error range, in inches
+                                            2, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
-                                            5 // maximum acceleration (slew)
+                                            0 // maximum acceleration (slew)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularcontroller(2, // proportional gain (kP)
+lemlib::ControllerSettings angularcontroller(0.88, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             5, // derivative gain (kD)
+                                             1.5, // derivative gain (kD)
                                              0, // anti windup
-                                             0, // small error range, in degrees
-                                             0, // small error range timeout, in milliseconds
-                                             0, // large error range, in degrees
-                                             0, // large error range timeout, in milliseconds
+                                             0.5, // small error range, in degrees
+                                             100, // small error range timeout, in milliseconds
+                                             2, // large error range, in degrees
+                                             500, // large error range timeout, in milliseconds
                                              0 // maximum acceleration (slew)
 );
 
@@ -99,40 +98,6 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
-
-
-void turnToHeading(float angle){
-  int top_speed = 45;
-  float speed;
-  float sumError = 0;
-  float error = 999;
-  float Kp = 0.3;
-  double Ki = 0.038;
-
-  double startingRot=chassis.getPose().theta;
-
-  while (fabs (error) > 0.55){
-    printf("%.2f\t%.2f\t%.2f\t%.2f\n",speed,error,Ki*sumError,Kp*error);
-    
-    error = angle - (chassis.getPose().theta-startingRot);
-    if(fabs(error) < 0.2*angle) sumError += error; // Lists range over which sum is used
-    speed = Kp*error + Ki*sumError; // slows down as it approaches destination
-
-    if(speed > top_speed) speed = top_speed; // doesn't get too fast
-    if(speed < -top_speed) speed = -top_speed; // doesn't get too slow
-
-    leftMotors.move(speed);
-    rightMotors.move(speed);
-    pros::delay(20);
-  }
-  leftMotors.brake();
-  rightMotors.brake();
-
-}
-
-void turnToPoint(){
-
-}
 
 
 /**
@@ -181,7 +146,7 @@ void competition_initialize() {}
 // get a path used for pure pursuit 
 
 // this needs to be put outside a function
-ASSET(tuah_txt); // '.' replaced with "_" to make c++ happy
+ASSET(susdiddytuahohioblud_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -201,16 +166,20 @@ x 35.901657   y -22.420971   t 213.004639
 x 21.707937   y -45.638882   t 213.005951
 
     */
-    chassis.setPose(0,0,0);
+    chassis.setPose(0, 0, 0);
 
-    chassis.moveToPose(0, 30, 0, 9999,{.forwards=true,.maxSpeed=50});
-    pros::delay(3000);
-    chassis.turnToHeading(90, 9999);
-    chassis.moveToPose(0, 30, 0, 9999);
+    std::printf("gurt\n");
+
+    chassis.moveToPose(30, 20, 75, 9999, {.forwards=true,.maxSpeed=127,.minSpeed=45});
+    // pros::delay(3000);
+    // chassis.turnToHeading(90, 9999);
+    // pros::delay(3000);
+
+    // chassis.follow(susdiddytuahohioblud_txt, 15, 4000, false);
+
+    std::printf("skinch\n");
 
     // chassis.follow(tuah_txt, 15, 4000, false);
-
-    // chassis.follow(example_txt, 15, 4000, false);
 
     /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
     chassis.moveToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
