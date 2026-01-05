@@ -214,7 +214,7 @@ x 21.707937   y -45.638882   t 213.005951
 
     /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
     chassis.moveToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
-    pros::delay(3000);
+    pros:z:delay(3000);
     chassis.moveToPose(30.589226, -29.712183, 214.523605,9999,{.maxSpeed=50});
     pros::delay(3000);
     chassis.moveToPose(35.901657, -22.420971, 213.004639,9999,{.maxSpeed=50});
