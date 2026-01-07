@@ -21,8 +21,6 @@ pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
 
 pros::Motor UpperIntake(10);
 pros::Motor MiddleIntake(-1);
-pros::Motor MiddleIntakeHar3(11);
-pros::Motor MiddleIntakeTuaj(-18);
 pros::Motor LowerIntake(14);
 pros::adi::DigitalOut wingPiston('B');
 pros::adi::DigitalOut tonguePiston('A');
@@ -170,16 +168,41 @@ x 21.707937   y -45.638882   t 213.005951
 
     std::printf("gurt\n");
 
-    chassis.moveToPose(30, 20, 75, 9999, {.forwards=true,.maxSpeed=127,.minSpeed=45});
-    // pros::delay(3000);
-    // chassis.turnToHeading(90, 9999);
-    // pros::delay(3000);
+    LowerIntake.move_velocity(600);
+    MiddleIntake.move_velocity(100);
+    UpperIntake.move_velocity(25);
+    chassis.moveToPose(1.000, 30.191, 5.000, 3000, {.forwards=true,.lead=0.7,.maxSpeed=127,.minSpeed=45});
+    LowerIntake.move_velocity(300);
+    MiddleIntake.move_velocity(50);
+    UpperIntake.move_velocity(5);
+    chassis.moveToPose(-37.479, 12.088, -110.377, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
 
-    // chassis.follow(susdiddytuahohioblud_txt, 15, 4000, false);
+    chassis.turnToHeading(-156.500, 3000);
+    chassis.moveToPoint(-25.009, 24.000, 3000, {.forwards=false,.maxSpeed=127,.minSpeed=45});
+    pros::delay(1000);
+    LowerIntake.move_velocity(600);
+    MiddleIntake.move_velocity(600);
+    UpperIntake.move_velocity(600);
+    pros::delay(2000);
+    LowerIntake.move_velocity(0);
+    MiddleIntake.move_velocity(0);
+    UpperIntake.move_velocity(0);
 
-    std::printf("skinch\n");
+    tonguePiston.set_value(true);
+    chassis.moveToPose(-38.500, -1.500, -150.000, 3000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
+    LowerIntake.move_velocity(300);
+    MiddleIntake.move_velocity(100);
+    UpperIntake.move_velocity(25);
+    pros::delay(2000);
+    LowerIntake.move_velocity(0);
+    MiddleIntake.move_velocity(0);
+    UpperIntake.move_velocity(0);
 
-    // chassis.follow(tuah_txt, 15, 4000, false);
+    chassis.moveToPose(-25.009, 24.000, -149.000, 3000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    tonguePiston.set_value(false);
+    LowerIntake.move_velocity(600);
+    MiddleIntake.move_velocity(600);
+    UpperIntake.move_velocity(600);
 
     /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
     chassis.moveToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
@@ -231,14 +254,6 @@ void opcontrol() {
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
     while (true) {
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
-            MiddleIntakeHar3.move(127);
-            MiddleIntakeTuaj.move(127);
-        }
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
-            MiddleIntakeHar3.move(-127);
-            MiddleIntakeTuaj.move(-127);
-        }
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
