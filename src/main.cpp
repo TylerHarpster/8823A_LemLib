@@ -21,8 +21,6 @@ pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
 
 pros::Motor UpperIntake(10);
 pros::Motor MiddleIntake(-1);
-pros::Motor MiddleIntakeHar3(11);
-pros::Motor MiddleIntakeTuaj(-18);
 pros::Motor LowerIntake(14);
 pros::adi::DigitalOut wingPiston('B');
 pros::adi::DigitalOut tonguePiston('A');
@@ -167,13 +165,7 @@ void ram(float speed){
 
 void autonomous() {
     // chassis.turnToHeading(90, 980990909090);
-    
-    chassis.follow(tuah_txt, 15, 4000, true);
-    pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
-    pros::Task unstuck([](){while(1){
-        std::printf("stuck \n");
-        chassis.
-    }});
+    // pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
     
     /*
 x -1.035869   y -30.486217   t 4.014997
@@ -187,18 +179,49 @@ x 21.707937   y -45.638882   t 213.005951
 
     std::printf("gurt\n");
 
-    chassis.moveToPose(-2.282223,  35.406418 ,-5.892851,9999,{.maxSpeed=127,.minSpeed=25,.earlyExitRange=4});
-    chassis.moveToPose(-19.98259,   27.310141, -75.674591,9999,{.maxSpeed=127});
-    chassis.moveToPose(35.298832,  21.136045 ,-119.479362,9999,{.maxSpeed=127});
-    chassis.moveToPose(44.067886,  4.412663  ,-214.156891,9999,{.maxSpeed=127});
-    chassis.moveToPose(27.316462,  27.127892 ,-211.383392,9999,{.maxSpeed=127});
-// pros::delay(3000);
-    // chassis.turnToHeading(90, 9999);
-    // pros::delay(3000);
+    LowerIntake.move_velocity(600);
+    MiddleIntake.move_velocity(250);
+    UpperIntake.move_velocity(25);
+    chassis.moveToPose(3.500, 31.500, 5.000, 3000, {.forwards=true,.lead=0.7,.maxSpeed=127,.minSpeed=45});
+    pros::delay(200);
+    LowerIntake.move_velocity(300);
+    MiddleIntake.move_velocity(50);
+    UpperIntake.move_velocity(5);
+    chassis.moveToPose(-39.500, 11.500, -110.377, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
+    LowerIntake.move_velocity(0);
+    MiddleIntake.move_velocity(0);
+    UpperIntake.move_velocity(0);
 
-    std::printf("skinch\n");
+    chassis.turnToHeading(-150.000, 2000);
+    chassis.moveToPose(-26.009, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    pros::delay(500);
+    LowerIntake.move_velocity(600);
+    MiddleIntake.move_velocity(600);
+    UpperIntake.move_velocity(600);
+    pros::delay(1250);
+    LowerIntake.move_velocity(0);
+    MiddleIntake.move_velocity(0);
+    UpperIntake.move_velocity(0);
 
-    // chassis.follow(tuah_txt, 15, 4000, false);
+    tonguePiston.set_value(true);
+    LowerIntake.move_velocity(400);
+    MiddleIntake.move_velocity(150);
+    UpperIntake.move_velocity(25);
+    chassis.moveToPose(-41.500, -2.200, -150.000, 1850, {.forwards=true,.lead=0,.maxSpeed=40,.minSpeed=10});
+    pros::delay(300);
+    LowerIntake.move_velocity(0);
+    MiddleIntake.move_velocity(0);
+    UpperIntake.move_velocity(0);
+
+    chassis.moveToPose(-26.150, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    tonguePiston.set_value(false);
+    LowerIntake.move_velocity(600);
+    MiddleIntake.move_velocity(600);
+    UpperIntake.move_velocity(600);
+    pros::delay(850);
+    MiddleIntake.move_velocity(-600);
+    pros::delay(300);
+    MiddleIntake.move_velocity(600);
 
     /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
     chassis.moveToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
@@ -251,14 +274,6 @@ pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getP
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
     while (true) {
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
-            MiddleIntakeHar3.move(127);
-            MiddleIntakeTuaj.move(127);
-        }
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
-            MiddleIntakeHar3.move(-127);
-            MiddleIntakeTuaj.move(-127);
-        }
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
