@@ -147,6 +147,17 @@ void competition_initialize() {}
 
 // this needs to be put outside a function
 ASSET(susdiddytuahohioblud_txt); // '.' replaced with "_" to make c++ happy
+ASSET(tuah_txt); // '.' replaced with "_" to make c++ happy
+
+void ram(float speed){
+    do{
+        rightMotors.move(speed);
+        leftMotors.move(speed);
+    }while(abs(leftEnc.get_velocity())>1000&&abs(rightEnc.get_velocity())>1000);
+    rightMotors.brake();
+    
+    leftMotors.brake();
+}
 
 /**
  * Runs during auto
@@ -156,7 +167,13 @@ ASSET(susdiddytuahohioblud_txt); // '.' replaced with "_" to make c++ happy
 
 void autonomous() {
     // chassis.turnToHeading(90, 980990909090);
-    pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    
+    chassis.follow(tuah_txt, 15, 4000, true);
+    pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    pros::Task unstuck([](){while(1){
+        std::printf("stuck \n");
+        chassis.
+    }});
     
     /*
 x -1.035869   y -30.486217   t 4.014997
@@ -170,12 +187,14 @@ x 21.707937   y -45.638882   t 213.005951
 
     std::printf("gurt\n");
 
-    chassis.moveToPose(30, 20, 75, 9999, {.forwards=true,.maxSpeed=127,.minSpeed=45});
-    // pros::delay(3000);
+    chassis.moveToPose(-2.282223,  35.406418 ,-5.892851,9999,{.maxSpeed=127,.minSpeed=25,.earlyExitRange=4});
+    chassis.moveToPose(-19.98259,   27.310141, -75.674591,9999,{.maxSpeed=127});
+    chassis.moveToPose(35.298832,  21.136045 ,-119.479362,9999,{.maxSpeed=127});
+    chassis.moveToPose(44.067886,  4.412663  ,-214.156891,9999,{.maxSpeed=127});
+    chassis.moveToPose(27.316462,  27.127892 ,-211.383392,9999,{.maxSpeed=127});
+// pros::delay(3000);
     // chassis.turnToHeading(90, 9999);
     // pros::delay(3000);
-
-    // chassis.follow(susdiddytuahohioblud_txt, 15, 4000, false);
 
     std::printf("skinch\n");
 
@@ -207,7 +226,7 @@ x 21.707937   y -45.638882   t 213.005951
     // will always be faster than 100 (out of a maximum of 127)
     // also force it to turn clockwise, the long way around
     chassis.turnToHeading(90, 1000, {.direction = AngularDirection::CW_CLOCKWISE, .minSpeed = 100});
-    // Follow the path in path.txt. Lookahead at 15, Timeout set to 4000
+    // Follow the path in paFFth.txt. Lookahead at 15, Timeout set to 4000
     // following the path with the back of the robot (forwards = false)
     // see line 116 to see how to define a path
     
@@ -227,7 +246,8 @@ x 21.707937   y -45.638882   t 213.005951
 void opcontrol() {
     // controller
     // loop to continuously update motors
-
+pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
     while (true) {
