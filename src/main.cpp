@@ -145,6 +145,17 @@ void competition_initialize() {}
 
 // this needs to be put outside a function
 ASSET(susdiddytuahohioblud_txt); // '.' replaced with "_" to make c++ happy
+ASSET(tuah_txt); // '.' replaced with "_" to make c++ happy
+
+void ram(float speed){
+    do{
+        rightMotors.move(speed);
+        leftMotors.move(speed);
+    }while(abs(leftEnc.get_velocity())>1000&&abs(rightEnc.get_velocity())>1000);
+    rightMotors.brake();
+    
+    leftMotors.brake();
+}
 
 /**
  * Runs during auto
@@ -282,7 +293,8 @@ x 21.707937   y -45.638882   t 213.005951
 void opcontrol() {
     // controller
     // loop to continuously update motors
-
+pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
     while (true) {
