@@ -157,7 +157,7 @@ enum autonRoute{
 autonRoute selectedAuton=skills;
 void autonomous() {
     // chassis.turnToHeading(90, 980990909090);
-    // pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
     
     /*
 x -1.035869   y -30.486217   t 4.014997
@@ -170,6 +170,47 @@ x 21.707937   y -45.638882   t 213.005951
     chassis.setPose(0, 0, 0);
 
     std::printf("gurt\n");
+
+    // RIGHT SIDE
+    
+    // LowerIntake.move_velocity(600);
+    // MiddleIntake.move_velocity(300);
+    // UpperIntake.move_velocity(25);
+    // chassis.moveToPose(18.463, 25.490, 34.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    // pros::delay(200);
+    // LowerIntake.move_velocity(100);
+    // MiddleIntake.move_velocity(0);
+    // UpperIntake.move_velocity(0);
+
+    // chassis.moveToPose(-6.000, 35.750, -52.507, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    // LowerIntake.move_velocity(-60);
+    // MiddleIntake.move_velocity(-60);
+    // UpperIntake.move_velocity(-50);
+    // pros::delay(1500);
+    // LowerIntake.move_velocity(0);
+    // MiddleIntake.move_velocity(0);
+    // UpperIntake.move_velocity(0);
+
+    // chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // chassis.turnToHeading(182.000, 1500);
+    // tonguePiston.set_value(true);
+    // pros::delay(500);
+    // LowerIntake.move_velocity(600);
+    // MiddleIntake.move_velocity(250);
+    // UpperIntake.move_velocity(25);
+    // chassis.moveToPose(35.229, -23.255, 183.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
+    // pros::delay(1000);
+    // LowerIntake.move_velocity(0);
+    // MiddleIntake.move_velocity(0);
+    // UpperIntake.move_velocity(0);
+
+    // chassis.moveToPose(35.000, 9.655, 183.504, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    // tonguePiston.set_value(false);
+    // LowerIntake.move_velocity(600);
+    // MiddleIntake.move_velocity(600);
+    // UpperIntake.move_velocity(600);
+
+    // LEFT SIDE
 
     LowerIntake.move_velocity(600);
     MiddleIntake.move_velocity(250);
@@ -215,44 +256,27 @@ x 21.707937   y -45.638882   t 213.005951
     pros::delay(300);
     MiddleIntake.move_velocity(600);
 
-    /*chassis.turnToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
-    chassis.moveToPoint(-9.735420, -34.67363,9999,{.maxSpeed=50});
-    pros:z:delay(3000);
-    chassis.moveToPose(30.589226, -29.712183, 214.523605,9999,{.maxSpeed=50});
-    pros::delay(3000);
-    chassis.moveToPose(35.901657, -22.420971, 213.004639,9999,{.maxSpeed=50});
-    pros::delay(3000);
-    chassis.moveToPose(21.707937, -45.638882, 213.005951,9999,{.maxSpeed=50});
+    // SKILLS
 
-    pros::delay(10000000);
-   std::printf("SAFFJFASFJFD\n");
-    
-    // Move to x: 20 and y: 15, and face heading 90. Timeout set to 4000 ms
-    chassis.moveToPose(20, 15, 90, 4000);
-    // Move to x: 0 and y: 0 and face heading 270, going backwards. Timeout set to 4000ms
-    chassis.moveToPose(0, 0, 270, 4000, {.forwards = false});
-    // cancel the movement after it has traveled 10 inches
-    chassis.waitUntil(10);
-    chassis.cancelMotion();
-    // Turn to face the point x:45, y:-45. Timeout set to 1000
-    // dont turn faster than 60 (out of a maximum of 127)
-    chassis.turnToPoint(45, -45, 1000, {.maxSpeed = 60});
-    // Turn to face a direction of 90º. Timeout set to 1000
-    // will always be faster than 100 (out of a maximum of 127)
-    // also force it to turn clockwise, the long way around
-    chassis.turnToHeading(90, 1000, {.direction = AngularDirection::CW_CLOCKWISE, .minSpeed = 100});
-    // Follow the path in paFFth.txt. Lookahead at 15, Timeout set to 4000
-    // following the path with the back of the robot (forwards = false)
-    // see line 116 to see how to define a path
-    
-    // wait until the chassis has traveled 10 inches. Otherwise the code directly after
-    // the movement will run immediately
-    // Unless its another movement, in which case it will wait
-    chassis.waitUntil(10);
-    pros::lcd::print(4, "Traveled 10 inches during pure pursuit!");
-    // wait until the movement is done
-    chassis.waitUntilDone();
-    pros::lcd::print(4, "pure pursuit finished!");*/
+    // chassis.moveToPose(0, 5, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(39.048, -2.000, 141.497, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(37.000, -27.016, 180.997, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(37.000, 9.334, 180.896, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(37.000, 0.334, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(46.056, 41.714, -2.279, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(41.746, 72.456, -21.396, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(30.423, 102.161, -2.026, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(31.225, 74.883, 0.161, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-16.950, 85.486, -89.635, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-54.651, 109.783, 0.598, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-55.550, 82.431, -0.437, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-68.747, 74.860, -176.785, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-69.050, 15.349, -179.905, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-55.872, -15.930, -178.615, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-55.471, 11.445, -175.001, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+
 }
 
 /**
