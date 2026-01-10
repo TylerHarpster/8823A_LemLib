@@ -78,3 +78,12 @@ void opcontrol(void);
 #endif
 
 #endif  // _PROS_MAIN_H_
+#include "pros/apix.h"
+
+#include "lemlib/chassis/trackingWheel.hpp"
+#include "pros/adi.hpp"
+#include "pros/misc.h"
+#include "pros/rtos.hpp"
+#include <cstdio>
+#include "temperature.h"
+
