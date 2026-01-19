@@ -10,34 +10,38 @@
 // controller
 
 
-int wingState=0;
-int tongueState=0;
+int wingState=0; // variable for wing
+int tongueState=0; // variable for tongue
+int middleState=0; // variable for middle score
+int retainerState=0; // variable for retainer
 
 
-pros::Controller controller(pros::E_CONTROLLER_MASTER);
+pros::Controller controller(pros::E_CONTROLLER_MASTER); // defines the controller
 
-pros::MotorGroup leftMotors({13, -12, 11}); // left motors on ports 1, 2, 3
-pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
+pros::MotorGroup leftMotors({13, -12, 11}); // left motors on ports 13, 12, 11
+pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 20, 19, 18
 
 pros::Motor UpperIntake(10);
 pros::Motor MiddleIntake(-1);
 pros::Motor LowerIntake(14);
-pros::adi::DigitalOut wingPiston('B');
-pros::adi::DigitalOut tonguePiston('A');
+pros::adi::DigitalOut wingPiston('C');
+pros::adi::DigitalOut tonguePiston('B');
+pros::adi::DigitalOut middlePiston('A');
+pros::adi::DigitalOut retainerPiston('D');
 
-
-// create an imu on port 10
+// create an imu (inertial) on port 15
 pros::Imu imu(15);
 
 // tracking wheels
-// horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
+// horizontal tracking wheel encoder. Rotation sensor, port 9, not reversed
 pros::Rotation horizontalEnc(9);
-// vertical tracking wheel encoder. Rotation sensor, port 11, reversed
+// vertical tracking wheel encoder. Rotation sensor, port 5, not reversed
 pros::Rotation leftEnc(5);
+// vertical tracking wheel encoder. Rotation sensor, port 4, reversed
 pros::Rotation rightEnc(-4);
-// horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
+// horizontal tracking wheel. 2.75" diameter, 4.5" offset, back of the robot (negative)
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -4.5);
-// vertical tracking wheel. 2.75" diameter, 2.5" offset, left of the robot (negative)
+// vertical tracking wheel. 2.75" diameter, 5.25" offset, left of the robot (negative)
 lemlib::TrackingWheel right(&rightEnc, lemlib::Omniwheel::NEW_275, 5.25);
 lemlib::TrackingWheel left(&leftEnc, lemlib::Omniwheel::NEW_275, -5.25);
 
@@ -167,52 +171,86 @@ void autonomous() {
     // chassis.turnToHeading(90, 980990909090);
     pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
     
-    /*
-x -1.035869   y -30.486217   t 4.014997
-x -9.735420   y -34.673637   t 78.631584
-x 30.589226   y -29.712183   t 214.523605
-x 35.901657   y -22.420971   t 213.004639
-x 21.707937   y -45.638882   t 213.005951
 
-    */
+
     chassis.setPose(0, 0, 0);
 
     std::printf("gurt\n");
 
+    // WIN POINT
+
+    // Moves to collect the cluster of three blocks
+    LowerIntake.move_velocity(600);
+    MiddleIntake.move_velocity(300);
+    UpperIntake.move_velocity(50);
+    chassis.moveToPose(18.463, 25.490, 34.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    pros::delay(500);
+    LowerIntake.move_velocity(300);
+    MiddleIntake.move_velocity(100);
+    UpperIntake.move_velocity(15);
+
+    // Move to score cluster of three and preload in low goal
+    chassis.moveToPose(-5.200, 35.650, -45.000, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    LowerIntake.move_velocity(-60);
+    MiddleIntake.move_velocity(-60);
+    UpperIntake.move_velocity(-50);
+    pros::delay(2000);
+    LowerIntake.move_velocity(0);
+    MiddleIntake.move_velocity(0);
+    UpperIntake.move_velocity(0);
+
+    // Back up and turn to face next block cluster
+
+
+    // Collect other cluster and score in High Middle Goal
+
+
+    // Move towards loader and collect alliance's colored blocks
+
+
+    // Score blocks from loader into long goal
+
+
     // RIGHT SIDE
     
+    // // Moves to collect the cluster of three blocks
     // LowerIntake.move_velocity(600);
     // MiddleIntake.move_velocity(300);
     // UpperIntake.move_velocity(25);
     // chassis.moveToPose(18.463, 25.490, 34.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
-    // pros::delay(200);
-    // LowerIntake.move_velocity(100);
-    // MiddleIntake.move_velocity(0);
+    // pros::delay(500);
+    // LowerIntake.move_velocity(175);
+    // MiddleIntake.move_velocity(25);
     // UpperIntake.move_velocity(0);
 
-    // chassis.moveToPose(-6.000, 35.750, -52.507, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    // // Move to score cluster of three and preload in low goal
+    // chassis.moveToPose(-5.200, 35.650, -45.000, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
     // LowerIntake.move_velocity(-60);
     // MiddleIntake.move_velocity(-60);
     // UpperIntake.move_velocity(-50);
-    // pros::delay(1500);
+    // pros::delay(2000);
     // LowerIntake.move_velocity(0);
     // MiddleIntake.move_velocity(0);
     // UpperIntake.move_velocity(0);
 
+    // // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
     // chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     // chassis.turnToHeading(182.000, 1500);
     // tonguePiston.set_value(true);
     // pros::delay(500);
+
+    // // Moves into the loader to unload and store the alliance's three colored blocks
     // LowerIntake.move_velocity(600);
     // MiddleIntake.move_velocity(250);
     // UpperIntake.move_velocity(25);
-    // chassis.moveToPose(35.229, -23.255, 183.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
-    // pros::delay(1000);
+    // chassis.moveToPose(35.229, -22.500, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
+    // pros::delay(500);
     // LowerIntake.move_velocity(0);
     // MiddleIntake.move_velocity(0);
     // UpperIntake.move_velocity(0);
 
-    // chassis.moveToPose(35.000, 9.655, 183.504, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    // // Moves to long goal to score the three blocks from the loader
+    // chassis.moveToPose(35.500, 9.655, 183.504, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
     // tonguePiston.set_value(false);
     // LowerIntake.move_velocity(600);
     // MiddleIntake.move_velocity(600);
@@ -220,49 +258,55 @@ x 21.707937   y -45.638882   t 213.005951
 
     // LEFT SIDE
 
-    LowerIntake.move_velocity(600);
-    MiddleIntake.move_velocity(250);
-    UpperIntake.move_velocity(25);
-    chassis.moveToPose(3.500, 31.500, 5.000, 3000, {.forwards=true,.lead=0.7,.maxSpeed=127,.minSpeed=45});
-    pros::delay(200);
-    LowerIntake.move_velocity(300);
-    MiddleIntake.move_velocity(50);
-    UpperIntake.move_velocity(5);
-    chassis.moveToPose(-39.500, 11.500, -110.377, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
-    LowerIntake.move_velocity(0);
-    MiddleIntake.move_velocity(0);
-    UpperIntake.move_velocity(0);
+    // // Moves to collect the cluster of three blocks
+    // LowerIntake.move_velocity(600);
+    // MiddleIntake.move_velocity(250);
+    // UpperIntake.move_velocity(25);
+    // chassis.moveToPose(3.500, 31.500, 5.000, 3000, {.forwards=true,.lead=0.7,.maxSpeed=127,.minSpeed=45});
+    // pros::delay(200);
+    // LowerIntake.move_velocity(300);
+    // MiddleIntake.move_velocity(50);
+    // UpperIntake.move_velocity(5);
 
-    chassis.turnToHeading(-150.000, 2000);
-    chassis.moveToPose(-26.009, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
-    pros::delay(500);
-    LowerIntake.move_velocity(600);
-    MiddleIntake.move_velocity(600);
-    UpperIntake.move_velocity(600);
-    pros::delay(1250);
-    LowerIntake.move_velocity(0);
-    MiddleIntake.move_velocity(0);
-    UpperIntake.move_velocity(0);
+    // // Moves to a point in between the loader and the long goal, then turns to line up with the loader
+    // chassis.moveToPose(-39.500, 11.500, -110.377, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
+    // LowerIntake.move_velocity(0);
+    // MiddleIntake.move_velocity(0);
+    // UpperIntake.move_velocity(0);
+    // chassis.turnToHeading(-150.000, 2000);
 
-    tonguePiston.set_value(true);
-    LowerIntake.move_velocity(400);
-    MiddleIntake.move_velocity(150);
-    UpperIntake.move_velocity(25);
-    chassis.moveToPose(-41.500, -2.200, -150.000, 1850, {.forwards=true,.lead=0,.maxSpeed=40,.minSpeed=10});
-    pros::delay(300);
-    LowerIntake.move_velocity(0);
-    MiddleIntake.move_velocity(0);
-    UpperIntake.move_velocity(0);
+    // // Moves to the long goal and scores the cluster of three
+    // chassis.moveToPose(-25.500, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    // pros::delay(500);
+    // LowerIntake.move_velocity(600);
+    // MiddleIntake.move_velocity(600);
+    // UpperIntake.move_velocity(600);
+    // pros::delay(1250);
+    // LowerIntake.move_velocity(0);
+    // MiddleIntake.move_velocity(0);
+    // UpperIntake.move_velocity(0);
 
-    chassis.moveToPose(-26.150, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
-    tonguePiston.set_value(false);
-    LowerIntake.move_velocity(600);
-    MiddleIntake.move_velocity(600);
-    UpperIntake.move_velocity(600);
-    pros::delay(850);
-    MiddleIntake.move_velocity(-600);
-    pros::delay(300);
-    MiddleIntake.move_velocity(600);
+    // // Extends the tongue and moves into the loader to store the alliance's three colored blocks
+    // tonguePiston.set_value(true);
+    // LowerIntake.move_velocity(400);
+    // MiddleIntake.move_velocity(150);
+    // UpperIntake.move_velocity(25);
+    // chassis.moveToPose(-39.000, -2.750, -150.000, 1850, {.forwards=true,.lead=0,.maxSpeed=40,.minSpeed=10});
+    // pros::delay(300);
+    // LowerIntake.move_velocity(0);
+    // MiddleIntake.move_velocity(0);
+    // UpperIntake.move_velocity(0);
+
+    // // Moves back to the long goal and scores the three blocks
+    // chassis.moveToPose(-25.500, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    // tonguePiston.set_value(false);
+    // LowerIntake.move_velocity(600);
+    // MiddleIntake.move_velocity(600);
+    // UpperIntake.move_velocity(600);
+    // pros::delay(850);
+    // MiddleIntake.move_velocity(-600);
+    // pros::delay(300);
+    // MiddleIntake.move_velocity(600);
 
     // SKILLS
 
@@ -315,22 +359,14 @@ pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getP
         }
         // delay to save resources
         
-        if(controller.get_digital_new_press(DIGITAL_Y)){wingPiston.set_value(wingState++%2);}
-		if(controller.get_digital_new_press(DIGITAL_B)){tonguePiston.set_value(tongueState++%2);}
-				//storage
-		if(controller.get_digital(DIGITAL_R1)){
-			LowerIntake.move(94*0.5);
-			MiddleIntake.move(63*0.5);
-			UpperIntake.move(-63);
-		}
-	
-		if(controller.get_digital_new_release(DIGITAL_R1)){
-			MiddleIntake.brake();
-			UpperIntake.brake();
-		}
+        if(controller.get_digital_new_press(DIGITAL_Y)){wingPiston.set_value(wingState++%2);} // Wing Button
+		if(controller.get_digital_new_press(DIGITAL_B)){tonguePiston.set_value(tongueState++%2);} // Tongue Button
+        if(controller.get_digital_new_press(DIGITAL_L2)){middlePiston.set_value(middleState++%2);} // Middle Scoring Button
+        if(controller.get_digital_new_press(DIGITAL_L1)){retainerPiston.set_value(retainerState++%2);} // Retainer Button
+			
 
 		//move blocks up
-		if(controller.get_digital(DIGITAL_L1)){
+		if(controller.get_digital(DIGITAL_R1)){
 			LowerIntake.move(94*0.5);
 			MiddleIntake.move(127*0.5);
 			UpperIntake.move(127);
@@ -343,26 +379,7 @@ pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getP
 			UpperIntake.move(-63);
 		}
 
-		//middle goal
-		if(controller.get_digital(DIGITAL_L2)){
-			LowerIntake.move(63*0.5);
-			MiddleIntake.move(94*0.5);
-			UpperIntake.move(-106);
-		}
-
-		//un-middle goal
-		if(controller.get_digital(DIGITAL_X)){
-			LowerIntake.move(-63*0.5);
-			MiddleIntake.move(-94*0.5);
-			UpperIntake.move(106);
-		}
-
-		//unstucky
-		if(controller.get_digital(DIGITAL_DOWN)){
-			LowerIntake.move(-127*0.5);
-			MiddleIntake.move(127*0.5);
-		}
-
+        //stop intake
 		if(controller.get_digital(DIGITAL_RIGHT)){
 			MiddleIntake.brake();
 			LowerIntake.brake();

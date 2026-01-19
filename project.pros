@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "hawk tuah skinch",
+    "project_name": "Right Side",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -82,7 +82,8 @@
       }
     },
     "upload_options": {
-      "icon": "pizza"
+      "icon": "pizza",
+      "slot": 3
     },
     "use_early_access": false
   }
