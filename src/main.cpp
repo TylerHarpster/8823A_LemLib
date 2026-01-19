@@ -1,12 +1,10 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "api.h"
-#include "lemlib/chassis/trackingWheel.hpp"
-#include "pros/adi.hpp"
-#include "pros/misc.h"
-#include "pros/rtos.hpp"
-#include <cstdio>
-
+#include "pros/colors.hpp"
+#include "pros/llemu.hpp"
+#include "pros/screen.h"
+#include "pros/screen.hpp"
 // controller
 
 
@@ -109,7 +107,8 @@ lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    pros::lcd::initialize(); // initialize brain screen
+    pros::lcd::initialize();
+    
     chassis.calibrate(); // calibrate sensors
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -121,18 +120,6 @@ void initialize() {
     // works, refer to the fmtlib docs
 
     // thread to for brain screen and position logging
-    pros::Task screenTask([&]() {
-        while (true) {
-            // print robot location to the brain screen
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            // log position telemetry
-            lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
-            // delay to save resources
-            pros::delay(50);
-        }
-    });
 }
 
 /**
@@ -166,7 +153,12 @@ void ram(float speed){
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
-
+enum autonRoute{
+    skills,
+    leftSide,
+    rightSide
+};
+autonRoute selectedAuton=skills;
 void autonomous() {
     // chassis.turnToHeading(90, 980990909090);
     pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
@@ -334,14 +326,86 @@ void autonomous() {
 /**
  * Runs in driver control
  */
+
+
+std::vector<touchscreen::button> buttons={};
+
+
+
+
+
 void opcontrol() {
+    touchscreen::button Button1(50,50,150,100,
+                        [](touchscreen::button self){
+                        selectedAuton=leftSide; 
+                        self.setState(1);
+                        self.setFillColor(0x00ff0000);
+                        printf("grereeeggr %i i\n",self.getState());},
+                        {.text="Left side",.fillColor=0x0000ffff});
+                        // Button1.setOnOther([](touchscreen::button self){
+                        // self.setFillColor(0x0000ffff); self.setState(0);});
+        touchscreen::button Button2(210,50,150,100,
+                        [](touchscreen::button self){
+                        selectedAuton=rightSide; 
+                        self.setState(1);
+                        self.setFillColor(0x00ff0000);
+                        printf("grereeeggr %i i\n",self.getState());},
+                        {.text="Right side",.fillColor=0x0000ffff});
+                        // Button1.setOnOther([](touchscreen::button self){
+                        // self.setFillColor(0x0000ffff); self.setState(0);});
+                        
+
+    buttons.push_back(Button1); //VEX REFRENCE!!!
+    buttons.push_back(Button2); //VEX REFRENCE!!!
+    
+
     // controller
     // loop to continuously update motors
-pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
-    
+    // pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    pros::screen::touch_callback([](){
+        int pressedIndex=-1;
+        for(int i=0; i<buttons.size();i++){
+            if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
+               buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
+                    
+                buttons[i].runPress();
+                pressedIndex=i;
+                break;
+            }
+            
+        }
+        if(pressedIndex!=-1){
+            for(int i=0; i<buttons.size();i++){
+                if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
+                buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
+                        
+                    if(i!=pressedIndex) buttons[i].runOtherPress();
+                }
+            }
+        }
+    },pros::last_touch_e_t::E_TOUCH_PRESSED);
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
+    int i=0;
     while (true) {
+    switch(selectedAuton){
+        case leftSide:
+            Button1.setFillColor(0x00FF0000);
+            Button2.setFillColor(0x00A7A7A7);
+        break;
+        case rightSide:
+            Button2.setFillColor(0x00FF0000);
+            Button1.setFillColor(0x00A7A7A7);
+        break;
+        case skills:
+            Button1.setFillColor(0x00A7A7A7);
+            Button2.setFillColor(0x00A7A7A7);
+        break;
+
+    }
+        pros::screen::erase();
+        Button1.draw();
+        Button2.draw();
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
