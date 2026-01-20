@@ -3,8 +3,12 @@
 #include "api.h"
 #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/motor_group.hpp"
+#include "pros/rtos.hpp"
 #include "pros/screen.h"
 #include "pros/screen.hpp"
+#include <thread>
+#include <vector>
 // controller
 
 
@@ -14,25 +18,25 @@ int tongueState=0;
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({13, -12, 11}); // left motors on ports 1, 2, 3
-pros::MotorGroup rightMotors({-20, 19, -18}); // right motors on ports 4, 5, 6
+//                             lb      lm      lf
+pros::MotorGroup leftMotors({4, -6, 1});
+pros::MotorGroup rightMotors({-21, 10, -9}); // right motors on ports 4, 5, 6
 
-pros::Motor UpperIntake(10);
-pros::Motor MiddleIntake(-1);
-pros::Motor LowerIntake(14);
+pros::MotorGroup intakeMotors({5,-20});
+
 pros::adi::DigitalOut wingPiston('B');
 pros::adi::DigitalOut tonguePiston('A');
 
 
 // create an imu on port 10
-pros::Imu imu(15);
+pros::Imu imu(3);
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
-pros::Rotation horizontalEnc(9);
+pros::Rotation horizontalEnc(20);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
-pros::Rotation leftEnc(5);
-pros::Rotation rightEnc(-4);
+pros::Rotation leftEnc(11);
+pros::Rotation rightEnc(-19);
 // horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -4.5);
 // vertical tracking wheel. 2.75" diameter, 2.5" offset, left of the robot (negative)
@@ -104,8 +108,8 @@ lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors
  */
 void initialize() {
     pros::lcd::initialize();
-    
     chassis.calibrate(); // calibrate sensors
+    // touchscreen::screenListInit();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -211,7 +215,7 @@ x 21.707937   y -45.638882   t 213.005951
     // UpperIntake.move_velocity(600);
 
     // LEFT SIDE
-
+    /*
     LowerIntake.move_velocity(600);
     MiddleIntake.move_velocity(250);
     UpperIntake.move_velocity(25);
@@ -276,92 +280,43 @@ x 21.707937   y -45.638882   t 213.005951
     // chassis.moveToPose(-55.471, 11.445, -175.001, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
     // chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
     // chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-
+    */
+    
 }
 
 /**
- * Runs in driver control
- */
+* Runs in driver control
+*/
 
 
-std::vector<touchscreen::button> buttons={};
+std::vector<touchscreen::button*> buttons={};
 
 
-
+touchscreen::screen* activeScreen;
 
 
 void opcontrol() {
-    touchscreen::button Button1(50,50,150,100,
-                        [](touchscreen::button self){
-                        selectedAuton=leftSide; 
-                        self.setState(1);
-                        self.setFillColor(0x00ff0000);
-                        printf("grereeeggr %i i\n",self.getState());},
-                        {.text="Left side",.fillColor=0x0000ffff});
-                        // Button1.setOnOther([](touchscreen::button self){
-                        // self.setFillColor(0x0000ffff); self.setState(0);});
-        touchscreen::button Button2(210,50,150,100,
-                        [](touchscreen::button self){
-                        selectedAuton=rightSide; 
-                        self.setState(1);
-                        self.setFillColor(0x00ff0000);
-                        printf("grereeeggr %i i\n",self.getState());},
-                        {.text="Right side",.fillColor=0x0000ffff});
-                        // Button1.setOnOther([](touchscreen::button self){
-                        // self.setFillColor(0x0000ffff); self.setState(0);});
-                        
 
-    buttons.push_back(Button1); //VEX REFRENCE!!!
-    buttons.push_back(Button2); //VEX REFRENCE!!!
-    
+    activeScreen=touchscreen::screenList.at(0);
 
     // controller
     // loop to continuously update motors
     // pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
-    pros::screen::touch_callback([](){
-        int pressedIndex=-1;
-        for(int i=0; i<buttons.size();i++){
-            if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
-               buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
-                    
-                buttons[i].runPress();
-                pressedIndex=i;
-                break;
-            }
-            
-        }
-        if(pressedIndex!=-1){
-            for(int i=0; i<buttons.size();i++){
-                if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
-                buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
-                        
-                    if(i!=pressedIndex) buttons[i].runOtherPress();
-                }
-            }
-        }
-    },pros::last_touch_e_t::E_TOUCH_PRESSED);
+
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
     int i=0;
-    while (true) {
-    switch(selectedAuton){
-        case leftSide:
-            Button1.setFillColor(0x00FF0000);
-            Button2.setFillColor(0x00A7A7A7);
-        break;
-        case rightSide:
-            Button2.setFillColor(0x00FF0000);
-            Button1.setFillColor(0x00A7A7A7);
-        break;
-        case skills:
-            Button1.setFillColor(0x00A7A7A7);
-            Button2.setFillColor(0x00A7A7A7);
-        break;
 
-    }
+
+    pros::screen::touch_callback([](){
+        activeScreen->onPress();
+    },pros::last_touch_e_t::E_TOUCH_PRESSED);
+
+
+    while (true) {
+
         pros::screen::erase();
-        Button1.draw();
-        Button2.draw();
+        activeScreen->draw();
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -381,58 +336,21 @@ void opcontrol() {
         
         if(controller.get_digital_new_press(DIGITAL_Y)){wingPiston.set_value(wingState++%2);}
 		if(controller.get_digital_new_press(DIGITAL_B)){tonguePiston.set_value(tongueState++%2);}
-				//storage
-		if(controller.get_digital(DIGITAL_R1)){
-			LowerIntake.move(94*0.5);
-			MiddleIntake.move(63*0.5);
-			UpperIntake.move(-63);
-		}
-	
-		if(controller.get_digital_new_release(DIGITAL_R1)){
-			MiddleIntake.brake();
-			UpperIntake.brake();
-		}
+
+        //l1 toggle retainer
+		// if(controller.get_digital_new_release(DIGITAL_R1)){
+			// intakeMotors.brake();
+		// }
 
 		//move blocks up
-		if(controller.get_digital(DIGITAL_L1)){
-			LowerIntake.move(94*0.5);
-			MiddleIntake.move(127*0.5);
-			UpperIntake.move(127);
+		if(controller.get_digital(DIGITAL_R1)){
+			intakeMotors.move(127);
 		}
 
 		//move blocks down
 		if(controller.get_digital(DIGITAL_R2)){
-			LowerIntake.move(-31*0.5);
-			MiddleIntake.move(-63*0.5);
-			UpperIntake.move(-63);
+			intakeMotors.move(-127);
 		}
 
-		//middle goal
-		if(controller.get_digital(DIGITAL_L2)){
-			LowerIntake.move(63*0.5);
-			MiddleIntake.move(94*0.5);
-			UpperIntake.move(-106);
-		}
-
-		//un-middle goal
-		if(controller.get_digital(DIGITAL_X)){
-			LowerIntake.move(-63*0.5);
-			MiddleIntake.move(-94*0.5);
-			UpperIntake.move(106);
-		}
-
-		//unstucky
-		if(controller.get_digital(DIGITAL_DOWN)){
-			LowerIntake.move(-127*0.5);
-			MiddleIntake.move(127*0.5);
-		}
-
-		if(controller.get_digital(DIGITAL_RIGHT)){
-			MiddleIntake.brake();
-			LowerIntake.brake();
-			UpperIntake.brake();
-		}
-
-        pros::delay(50);
     }
 }
