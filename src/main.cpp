@@ -103,6 +103,8 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
 
 
+touchscreen::screen* activeScreen;
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -112,6 +114,9 @@ lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors
 void initialize() {
     pros::lcd::initialize();
     chassis.calibrate(); // calibrate sensors
+        pros::screen::touch_callback([](){
+        activeScreen->onPress();
+    },pros::last_touch_e_t::E_TOUCH_PRESSED);
     // touchscreen::screenListInit();
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -128,7 +133,14 @@ void initialize() {
 /**
  * Runs while the robot is disabled
  */
-void disabled() {}
+void disabled() {
+    while(67/41){
+    pros::screen::erase();
+        activeScreen->draw();
+        pros::delay(67);
+    }
+
+}
 
 /**
  * runs after initialize if the robot is connected to field control
@@ -155,12 +167,7 @@ void ram(float speed){
  * Runs during auto
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
- */
-enum autonRoute{
-    skills,
-    leftSide,
-    rightSide
-};
+*/
 autonRoute selectedAuton=skills;
 void autonomous() {
     // chassis.turnToHeading(90, 980990909090);
@@ -173,6 +180,10 @@ void autonomous() {
     std::printf("gurt\n");
 
     // WIN POINT
+
+    switch (selectedAuton) {
+
+        case smegSide:
 
     // Moves to collect the cluster of three blocks
     retainerPiston.set_value(true);
@@ -229,125 +240,128 @@ void autonomous() {
     tonguePiston.set_value(false);
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
+    break;
+    case rightSide:
 
     // RIGHT SIDE
     
     // // Moves to collect the cluster of three blocks
-    // LowerIntake.move_velocity(600);
-    // .move_velocity(300);
-    // .move_velocity(25);
-    // chassis.moveToPose(18.463, 25.490, 34.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
-    // pros::delay(500);
-    // LowerIntake.move_velocity(175);
-    // .move_velocity(25);
-    // .move_velocity(0);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+
+    chassis.moveToPose(18.463, 25.490, 34.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    pros::delay(500);
+    LeftIntake.move_velocity(175);
+    RightIntake.move_velocity(175);
+
 
     // // Move to score cluster of three and preload in low goal
-    // chassis.moveToPose(-5.200, 35.650, -45.000, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
-    // LowerIntake.move_velocity(-60);
-    // .move_velocity(-60);
-    // .move_velocity(-50);
-    // pros::delay(2000);
-    // LowerIntake.move_velocity(0);
-    // .move_velocity(0);
-    // .move_velocity(0);
+    chassis.moveToPose(-5.200, 35.650, -45.000, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    LeftIntake.move_velocity(-60);
+    RightIntake.move_velocity(-60);
+   
+    pros::delay(2000);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
+   
 
     // // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
-    // chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    // chassis.turnToHeading(182.000, 1500);
-    // tonguePiston.set_value(true);
-    // pros::delay(500);
+    chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.turnToHeading(182.000, 1500);
+    tonguePiston.set_value(true);
+    pros::delay(500);
 
     // // Moves into the loader to unload and store the alliance's three colored blocks
-    // LowerIntake.move_velocity(600);
-    // .move_velocity(250);
-    // .move_velocity(25);
-    // chassis.moveToPose(35.229, -22.500, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
-    // pros::delay(500);
-    // LowerIntake.move_velocity(0);
-    // .move_velocity(0);
-    // .move_velocity(0);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+
+    chassis.moveToPose(35.229, -22.500, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
+    pros::delay(500);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
+
 
     // // Moves to long goal to score the three blocks from the loader
-    // chassis.moveToPose(35.500, 9.655, 183.504, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
-    // tonguePiston.set_value(false);
-    // LowerIntake.move_velocity(600);
-    // .move_velocity(600);
-    // .move_velocity(600);
+    chassis.moveToPose(35.500, 9.655, 183.504, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    tonguePiston.set_value(false);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+
+    break;
 
     // LEFT SIDE
 
+    case leftSide:
     // // Moves to collect the cluster of three blocks
-    // LowerIntake.move_velocity(600);
-    // .move_velocity(250);
-    // .move_velocity(25);
-    // chassis.moveToPose(3.500, 31.500, 5.000, 3000, {.forwards=true,.lead=0.7,.maxSpeed=127,.minSpeed=45});
-    // pros::delay(200);
-    // LowerIntake.move_velocity(300);
-    // .move_velocity(50);
-    // .move_velocity(5);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+  
+    chassis.moveToPose(3.500, 31.500, 5.000, 3000, {.forwards=true,.lead=0.7,.maxSpeed=127,.minSpeed=45});
+    pros::delay(200);
+    LeftIntake.move_velocity(300);
+    RightIntake.move_velocity(300);
 
     // // Moves to a point in between the loader and the long goal, then turns to line up with the loader
     // chassis.moveToPose(-39.500, 11.500, -110.377, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
-    // LowerIntake.move_velocity(0);
-    // .move_velocity(0);
-    // .move_velocity(0);
-    // chassis.turnToHeading(-150.000, 2000);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
+
+    chassis.turnToHeading(-150.000, 2000);
 
     // // Moves to the long goal and scores the cluster of three
-    // chassis.moveToPose(-25.500, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
-    // pros::delay(500);
-    // LowerIntake.move_velocity(600);
-    // .move_velocity(600);
-    // .move_velocity(600);
-    // pros::delay(1250);
-    // LowerIntake.move_velocity(0);
-    // .move_velocity(0);
-    // .move_velocity(0);
+    chassis.moveToPose(-25.500, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    pros::delay(500);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    
+    pros::delay(1250);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
+  
 
     // // Extends the tongue and moves into the loader to store the alliance's three colored blocks
-    // tonguePiston.set_value(true);
-    // LowerIntake.move_velocity(400);
-    // .move_velocity(150);
-    // .move_velocity(25);
-    // chassis.moveToPose(-39.000, -2.750, -150.000, 1850, {.forwards=true,.lead=0,.maxSpeed=40,.minSpeed=10});
-    // pros::delay(300);
-    // LowerIntake.move_velocity(0);
-    // .move_velocity(0);
-    // .move_velocity(0);
+    tonguePiston.set_value(true);
+    LeftIntake.move_velocity(400);
+    RightIntake.move_velocity(400);
+
+    chassis.moveToPose(-39.000, -2.750, -150.000, 1850, {.forwards=true,.lead=0,.maxSpeed=40,.minSpeed=10});
+    pros::delay(300);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
 
     // // Moves back to the long goal and scores the three blocks
-    // chassis.moveToPose(-25.500, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
-    // tonguePiston.set_value(false);
-    // LowerIntake.move_velocity(600);
-    // .move_velocity(600);
-    // .move_velocity(600);
-    // pros::delay(850);
-    // .move_velocity(-600);
-    // pros::delay(300);
-    // .move_velocity(600);
+    chassis.moveToPose(-25.500, 25.000, -148.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    tonguePiston.set_value(false);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
 
+    pros::delay(850);
+
+    pros::delay(300);
+
+break;
     // SKILLS
-
-    // chassis.moveToPose(0, 5, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(39.048, -2.000, 141.497, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(37.000, -27.016, 180.997, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(37.000, 9.334, 180.896, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(37.000, 0.334, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(46.056, 41.714, -2.279, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(41.746, 72.456, -21.396, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(30.423, 102.161, -2.026, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(31.225, 74.883, 0.161, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-16.950, 85.486, -89.635, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-54.651, 109.783, 0.598, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-55.550, 82.431, -0.437, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-68.747, 74.860, -176.785, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-69.050, 15.349, -179.905, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-55.872, -15.930, -178.615, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-55.471, 11.445, -175.001, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    */
+case skills:
+    chassis.moveToPose(0, 5, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(39.048, -2.000, 141.497, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(37.000, -27.016, 180.997, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(37.000, 9.334, 180.896, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(37.000, 0.334, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(46.056, 41.714, -2.279, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(41.746, 72.456, -21.396, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(30.423, 102.161, -2.026, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(31.225, 74.883, 0.161, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-16.950, 85.486, -89.635, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-54.651, 109.783, 0.598, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-55.550, 82.431, -0.437, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-68.747, 74.860, -176.785, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-69.050, 15.349, -179.905, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-55.872, -15.930, -178.615, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-55.471, 11.445, -175.001, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    break;
+    }
     
 }
 
@@ -358,8 +372,6 @@ void autonomous() {
 
 std::vector<touchscreen::button*> buttons={};
 
-
-touchscreen::screen* activeScreen;
 
 
 void opcontrol() {

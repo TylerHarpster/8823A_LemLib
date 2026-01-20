@@ -8,6 +8,14 @@
 #include <sys/types.h>
 #include <variant>
 #include <vector>
+enum autonRoute{
+    skills,
+    leftSide,
+    rightSide,
+    smegSide
+    
+};
+extern autonRoute selectedAuton;
 
 namespace touchscreen{
     enum buttonShapes{ //all shapes a button can be drawn in
