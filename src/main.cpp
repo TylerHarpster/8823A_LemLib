@@ -3,8 +3,13 @@
 #include "api.h"
 #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/misc.h"
+#include "pros/motor_group.hpp"
+#include "pros/rtos.hpp"
 #include "pros/screen.h"
 #include "pros/screen.hpp"
+#include <thread>
+#include <vector>
 // controller
 
 
@@ -99,6 +104,8 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
 
 
+touchscreen::screen* activeScreen;
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -107,8 +114,11 @@ lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors
  */
 void initialize() {
     pros::lcd::initialize();
-    
     chassis.calibrate(); // calibrate sensors
+        pros::screen::touch_callback([](){
+        activeScreen->onPress();
+    },pros::last_touch_e_t::E_TOUCH_PRESSED);
+    // touchscreen::screenListInit();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -124,7 +134,14 @@ void initialize() {
 /**
  * Runs while the robot is disabled
  */
-void disabled() {}
+void disabled() {
+    while(67/41){
+    pros::screen::erase();
+        activeScreen->draw();
+        pros::delay(67);
+    }
+
+}
 
 /**
  * runs after initialize if the robot is connected to field control
@@ -151,12 +168,7 @@ void ram(float speed){
  * Runs during auto
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
- */
-enum autonRoute{
-    skills,
-    leftSide,
-    rightSide
-};
+*/
 autonRoute selectedAuton=skills;
 void autonomous() {
 
@@ -169,6 +181,10 @@ void autonomous() {
     std::printf("gurt\n");
 
     // WIN POINT
+
+    switch (selectedAuton) {
+
+        case smegSide:
 
     // // Moves to collect the cluster of three blocks
     // retainerPiston.set_value(true);
@@ -245,10 +261,10 @@ void autonomous() {
     // RightIntake.move_velocity(0);
 
     // // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
-    // chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    // chassis.turnToHeading(182.000, 1500);
-    // tonguePiston.set_value(true);
-    // pros::delay(500);
+    chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.turnToHeading(182.000, 1500);
+    tonguePiston.set_value(true);
+    pros::delay(500);
 
     // // Moves into the loader to unload and store the alliance's three colored blocks
     // LeftIntake.move_velocity(600);
@@ -264,6 +280,7 @@ void autonomous() {
 
     // LEFT SIDE
 
+    case leftSide:
     // // Moves to collect the cluster of three blocks
     // retainerPiston.set_value(true);
     // LeftIntake.move_velocity(600);
@@ -287,120 +304,77 @@ void autonomous() {
 
 
     // SKILLS
-
-    // chassis.moveToPose(0, 5, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(39.048, -2.000, 141.497, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(37.000, -27.016, 180.997, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(37.000, 9.334, 180.896, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(37.000, 0.334, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(46.056, 41.714, -2.279, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(41.746, 72.456, -21.396, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(30.423, 102.161, -2.026, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(31.225, 74.883, 0.161, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-16.950, 85.486, -89.635, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-54.651, 109.783, 0.598, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-55.550, 82.431, -0.437, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-68.747, 74.860, -176.785, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-69.050, 15.349, -179.905, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-55.872, -15.930, -178.615, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-55.471, 11.445, -175.001, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    // chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-
+case skills:
+    chassis.moveToPose(0, 5, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(39.048, -2.000, 141.497, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(37.000, -27.016, 180.997, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(37.000, 9.334, 180.896, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(37.000, 0.334, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(46.056, 41.714, -2.279, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(41.746, 72.456, -21.396, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(30.423, 102.161, -2.026, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(31.225, 74.883, 0.161, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-16.950, 85.486, -89.635, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-54.651, 109.783, 0.598, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-55.550, 82.431, -0.437, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-68.747, 74.860, -176.785, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-69.050, 15.349, -179.905, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-55.872, -15.930, -178.615, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-55.471, 11.445, -175.001, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    break;
+    }
+    
 }
 
 /**
- * Runs in driver control
- */
+* Runs in driver control
+*/
 
 
-std::vector<touchscreen::button> buttons={};
-
-
+std::vector<touchscreen::button*> buttons={};
 
 
 
 void opcontrol() {
-    touchscreen::button Button1(50,50,150,100,
-                        [](touchscreen::button self){
-                        selectedAuton=leftSide; 
-                        self.setState(1);
-                        self.setFillColor(0x00ff0000);
-                        printf("grereeeggr %i i\n",self.getState());},
-                        {.text="Left side",.fillColor=0x0000ffff});
-                        // Button1.setOnOther([](touchscreen::button self){
-                        // self.setFillColor(0x0000ffff); self.setState(0);});
-        touchscreen::button Button2(210,50,150,100,
-                        [](touchscreen::button self){
-                        selectedAuton=rightSide; 
-                        self.setState(1);
-                        self.setFillColor(0x00ff0000);
-                        printf("grereeeggr %i i\n",self.getState());},
-                        {.text="Right side",.fillColor=0x0000ffff});
-                        // Button1.setOnOther([](touchscreen::button self){
-                        // self.setFillColor(0x0000ffff); self.setState(0);});
-                        
 
-    buttons.push_back(Button1); //VEX REFRENCE!!!
-    buttons.push_back(Button2); //VEX REFRENCE!!!
-    
+    activeScreen=touchscreen::screenList.at(0);
 
     // controller
     // loop to continuously update motors
     // pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
-    pros::screen::touch_callback([](){
-        int pressedIndex=-1;
-        for(int i=0; i<buttons.size();i++){
-            if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
-               buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
-                    
-                buttons[i].runPress();
-                pressedIndex=i;
-                break;
-            }
-            
-        }
-        if(pressedIndex!=-1){
-            for(int i=0; i<buttons.size();i++){
-                if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
-                buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
-                        
-                    if(i!=pressedIndex) buttons[i].runOtherPress();
-                }
-            }
-        }
-    },pros::last_touch_e_t::E_TOUCH_PRESSED);
+
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
     int i=0;
-    while (true) {
-    switch(selectedAuton){
-        case leftSide:
-            Button1.setFillColor(0x00FF0000);
-            Button2.setFillColor(0x00A7A7A7);
-        break;
-        case rightSide:
-            Button2.setFillColor(0x00FF0000);
-            Button1.setFillColor(0x00A7A7A7);
-        break;
-        case skills:
-            Button1.setFillColor(0x00A7A7A7);
-            Button2.setFillColor(0x00A7A7A7);
-        break;
 
-    }
+
+    pros::screen::touch_callback([](){
+        activeScreen->onPress();
+    },pros::last_touch_e_t::E_TOUCH_PRESSED);
+
+    int tankState;
+    while (true) {
+
         pros::screen::erase();
-        Button1.draw();
-        Button2.draw();
+        activeScreen->draw();
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        		float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
-		float j3=controller.get_analog(ANALOG_LEFT_Y);
+        if(tankState%2==1){
+            leftMotors.move(controller.get_analog(ANALOG_LEFT_Y));
+            rightMotors.move(controller.get_analog(ANALOG_RIGHT_Y));
+        }
+        else{
+        	float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
+		    float j3=controller.get_analog(ANALOG_LEFT_Y);
+            leftMotors.move(j3+j1);
+		    rightMotors.move(j3-j1);
+        }
 
-		leftMotors.move(j3+j1);
-		rightMotors.move(j3-j1);
+		
 
         
 
@@ -432,6 +406,9 @@ void opcontrol() {
 			LeftIntake.brake();
             RightIntake.brake();
 		}
+        if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)){
+            tankState++;
+        }
 
         pros::delay(50);
     }
