@@ -3,6 +3,7 @@
 #include "api.h"
 #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/misc.h"
 #include "pros/motor_group.hpp"
 #include "pros/rtos.hpp"
 #include "pros/screen.h"
@@ -391,7 +392,7 @@ void opcontrol() {
         activeScreen->onPress();
     },pros::last_touch_e_t::E_TOUCH_PRESSED);
 
-
+    int tankState;
     while (true) {
 
         pros::screen::erase();
@@ -400,11 +401,18 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        		float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
-		float j3=controller.get_analog(ANALOG_LEFT_Y);
+        if(tankState%2==1){
+            leftMotors.move(controller.get_analog(ANALOG_LEFT_Y));
+            rightMotors.move(controller.get_analog(ANALOG_RIGHT_Y));
+        }
+        else{
+        	float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
+		    float j3=controller.get_analog(ANALOG_LEFT_Y);
+            leftMotors.move(j3+j1);
+		    rightMotors.move(j3-j1);
+        }
 
-		leftMotors.move(j3+j1);
-		rightMotors.move(j3-j1);
+		
 
         
 
@@ -436,6 +444,9 @@ void opcontrol() {
 			LeftIntake.brake();
             RightIntake.brake();
 		}
+        if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)){
+            tankState++;
+        }
 
         pros::delay(50);
     }
