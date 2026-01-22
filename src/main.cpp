@@ -1,15 +1,10 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "api.h"
-#include "pros/colors.hpp"
+// #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
-#include "pros/misc.h"
-#include "pros/motor_group.hpp"
-#include "pros/rtos.hpp"
-#include "pros/screen.h"
-#include "pros/screen.hpp"
-#include <thread>
-#include <vector>
+// #include "pros/screen.h"
+// #include "pros/screen.hpp"
 // controller
 
 
@@ -104,8 +99,6 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
 
 
-touchscreen::screen* activeScreen;
-
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -114,11 +107,8 @@ touchscreen::screen* activeScreen;
  */
 void initialize() {
     pros::lcd::initialize();
+    
     chassis.calibrate(); // calibrate sensors
-        pros::screen::touch_callback([](){
-        activeScreen->onPress();
-    },pros::last_touch_e_t::E_TOUCH_PRESSED);
-    // touchscreen::screenListInit();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -134,14 +124,7 @@ void initialize() {
 /**
  * Runs while the robot is disabled
  */
-void disabled() {
-    while(67/41){
-    pros::screen::erase();
-        activeScreen->draw();
-        pros::delay(67);
-    }
-
-}
+void disabled() {}
 
 /**
  * runs after initialize if the robot is connected to field control
@@ -168,8 +151,13 @@ void ram(float speed){
  * Runs during auto
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
-*/
-autonRoute selectedAuton=skills;
+ */
+// enum autonRoute{
+//     skills,
+//     leftSide,
+//     rightSide
+// };
+// autonRoute selectedAuton=skills;
 void autonomous() {
 
     pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
@@ -180,11 +168,7 @@ void autonomous() {
 
     std::printf("gurt\n");
 
-    // WIN POINT
-
-    switch (selectedAuton) {
-
-        case smegSide:
+    // SIGNATURE WIN POINT
 
     // // Moves to collect the cluster of three blocks
     // retainerPiston.set_value(true);
@@ -209,10 +193,10 @@ void autonomous() {
     // LeftIntake.move_velocity(100);
     // RightIntake.move_velocity(100);
 
-    // Collect other cluster and score in High Middle Goal
-    chassis.moveToPose(-19.602, 29.965, -49.452, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
-    chassis.turnToHeading(-141.138, 5000);
-    chassis.moveToPose(-2.500, 28.000, -141.138, 5000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // // Collect other cluster and score in High Middle Goal
+    // chassis.moveToPose(-46.878, 23.685, -90.452, 3000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    // chassis.turnToHeading(-131.138, 1500);
+    // chassis.moveToPose(-26.500, 32.000, -131.138, 1300, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     // LeftIntake.move_velocity(-300);
     // RightIntake.move_velocity(-300);
     // pros::delay(250);
@@ -221,29 +205,64 @@ void autonomous() {
     // RightIntake.move_velocity(400);
     // pros::delay(2500);
 
-    // Move towards loader and collect alliance's colored blocks
+    // // Move towards loader and collect alliance's colored blocks
     // LeftIntake.move_velocity(0);
     // RightIntake.move_velocity(0);
     // middlePiston.set_value(false);
-    chassis.moveToPose(-38.285, -4.045, -131.138, 5000, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=20});
-    chassis.turnToHeading(-185.032, 4000);
+    // chassis.moveToPose(-65.285, 1.045, -131.138, 2000, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=20});
+    // chassis.turnToHeading(-172.032, 2000);
     // tonguePiston.set_value(true);
     // LeftIntake.move_velocity(400);
     // RightIntake.move_velocity(400);
-    chassis.moveToPose(-36.071, -20.750, -185.281, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    // chassis.moveToPose(-64.071, -28.750, -171.281, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
 
-    // Score blocks from loader into long goal
+    // // Score blocks from loader into long goal
     // pros::delay(1500);
     // LeftIntake.move_velocity(0);
     // RightIntake.move_velocity(0);
-    chassis.moveToPose(-36.750, 9.904, -185.217, 5000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=20});
+    // chassis.moveToPose(-60.750, 15.904, -173.217, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=20});
     // retainerPiston.set_value(false);
     // tonguePiston.set_value(false);
     // LeftIntake.move_velocity(600);
     // RightIntake.move_velocity(600);
 
 
-    // RIGHT SIDE
+    // NEW LEFT SIDE
+
+    // Collect cluster and score in High Middle Goal
+    retainerPiston.set_value(true);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    chassis.moveToPose(-21.750, 29.965, -49.452, 1850, {.forwards=true,.maxSpeed=127,.minSpeed=42});
+    chassis.turnToHeading(-141.138, 750);
+    chassis.moveToPose(-1.250, 30.000, -141.138, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=37});
+    LeftIntake.move_velocity(-380);
+    RightIntake.move_velocity(-380);
+    pros::delay(275);
+    retainerPiston.set_value(false);
+    middlePiston.set_value(true);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    pros::delay(1850);
+
+    // Move towards loader and collect alliance's colored blocks
+    retainerPiston.set_value(true);
+    middlePiston.set_value(false);
+    chassis.moveToPose(-39.000, -3.245, -131.138, 2450, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=35});
+    chassis.turnToHeading(-185.032, 875);
+    tonguePiston.set_value(true);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    chassis.moveToPose(-38.500, -26.950, -181.281, 1750, {.forwards=true,.maxSpeed=127,.minSpeed=43});
+
+    // Score blocks from loader into long goal
+    pros::delay(500);
+    chassis.moveToPose(-39.000, 10.904, -180.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    retainerPiston.set_value(false);
+    tonguePiston.set_value(false);
+
+
+    // OLD RIGHT SIDE
     
     // // Moves to collect the cluster of three blocks
     // retainerPiston.set_value(true);
@@ -261,10 +280,10 @@ void autonomous() {
     // RightIntake.move_velocity(0);
 
     // // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
-    chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.turnToHeading(182.000, 1500);
-    tonguePiston.set_value(true);
-    pros::delay(500);
+    // chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // chassis.turnToHeading(182.000, 1500);
+    // tonguePiston.set_value(true);
+    // pros::delay(500);
 
     // // Moves into the loader to unload and store the alliance's three colored blocks
     // LeftIntake.move_velocity(600);
@@ -278,9 +297,8 @@ void autonomous() {
     // retainerPiston.set_value(false);
 
 
-    // LEFT SIDE
+    // OLD LEFT SIDE
 
-    case leftSide:
     // // Moves to collect the cluster of three blocks
     // retainerPiston.set_value(true);
     // LeftIntake.move_velocity(600);
@@ -304,77 +322,120 @@ void autonomous() {
 
 
     // SKILLS
-case skills:
-    chassis.moveToPose(0, 5, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(39.048, -2.000, 141.497, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(37.000, -27.016, 180.997, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(37.000, 9.334, 180.896, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(37.000, 0.334, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(46.056, 41.714, -2.279, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(41.746, 72.456, -21.396, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(30.423, 102.161, -2.026, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(31.225, 74.883, 0.161, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(-16.950, 85.486, -89.635, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(-54.651, 109.783, 0.598, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(-55.550, 82.431, -0.437, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(-68.747, 74.860, -176.785, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(-69.050, 15.349, -179.905, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(-55.872, -15.930, -178.615, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(-55.471, 11.445, -175.001, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    break;
-    }
-    
+
+    // chassis.moveToPose(0, 5, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(39.048, -2.000, 141.497, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(37.000, -27.016, 180.997, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(37.000, 9.334, 180.896, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(37.000, 0.334, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(46.056, 41.714, -2.279, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(41.746, 72.456, -21.396, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(30.423, 102.161, -2.026, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(31.225, 74.883, 0.161, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-16.950, 85.486, -89.635, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-54.651, 109.783, 0.598, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-55.550, 82.431, -0.437, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-68.747, 74.860, -176.785, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-69.050, 15.349, -179.905, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-55.872, -15.930, -178.615, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-55.471, 11.445, -175.001, 5000, {.forwards=false,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+    // chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
+
 }
 
 /**
-* Runs in driver control
-*/
+ * Runs in driver control
+ */
 
 
-std::vector<touchscreen::button*> buttons={};
+std::vector<touchscreen::button> buttons={};
+
+
 
 
 
 void opcontrol() {
+    // touchscreen::button Button1(50,50,150,100,
+    //                     [](touchscreen::button self){
+    //                     selectedAuton=leftSide; 
+    //                     self.setState(1);
+    //                     self.setFillColor(0x00ff0000);
+    //                     printf("grereeeggr %i i\n",self.getState());},
+    //                     {.text="Left side",.fillColor=0x0000ffff});
+    //                     // Button1.setOnOther([](touchscreen::button self){
+    //                     // self.setFillColor(0x0000ffff); self.setState(0);});
+    //     touchscreen::button Button2(210,50,150,100,
+    //                     [](touchscreen::button self){
+    //                     selectedAuton=rightSide; 
+    //                     self.setState(1);
+    //                     self.setFillColor(0x00ff0000);
+    //                     printf("grereeeggr %i i\n",self.getState());},
+    //                     {.text="Right side",.fillColor=0x0000ffff});
+    //                     // Button1.setOnOther([](touchscreen::button self){
+    //                     // self.setFillColor(0x0000ffff); self.setState(0);});
+                        
 
-    activeScreen=touchscreen::screenList.at(0);
+    // buttons.push_back(Button1); //VEX REFRENCE!!!
+    // buttons.push_back(Button2); //VEX REFRENCE!!!
+    
 
-    // controller
-    // loop to continuously update motors
-    // pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
-
+    // // controller
+    // // loop to continuously update motors
+    // // pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    // pros::screen::touch_callback([](){
+    //     int pressedIndex=-1;
+    //     for(int i=0; i<buttons.size();i++){
+    //         if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
+    //            buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
+                    
+    //             buttons[i].runPress();
+    //             pressedIndex=i;
+    //             break;
+    //         }
+            
+    //     }
+    //     if(pressedIndex!=-1){
+    //         for(int i=0; i<buttons.size();i++){
+    //             if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
+    //             buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
+                        
+    //                 if(i!=pressedIndex) buttons[i].runOtherPress();
+    //             }
+    //         }
+    //     }
+    // },pros::last_touch_e_t::E_TOUCH_PRESSED);
     chassis.cancelAllMotions();
     chassis.setPose(0,0,0);
-    int i=0;
-
-
-    pros::screen::touch_callback([](){
-        activeScreen->onPress();
-    },pros::last_touch_e_t::E_TOUCH_PRESSED);
-
-    int tankState;
+    // int i=0;
     while (true) {
+    // switch(selectedAuton){
+    //     case leftSide:
+    //         Button1.setFillColor(0x00FF0000);
+    //         Button2.setFillColor(0x00A7A7A7);
+    //     break;
+    //     case rightSide:
+    //         Button2.setFillColor(0x00FF0000);
+    //         Button1.setFillColor(0x00A7A7A7);
+    //     break;
+    //     case skills:
+    //         Button1.setFillColor(0x00A7A7A7);
+    //         Button2.setFillColor(0x00A7A7A7);
+    //     break;
 
-        pros::screen::erase();
-        activeScreen->draw();
+    // }
+    //     pros::screen::erase();
+    //     Button1.draw();
+    //     Button2.draw();
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        if(tankState%2==1){
-            leftMotors.move(controller.get_analog(ANALOG_LEFT_Y));
-            rightMotors.move(controller.get_analog(ANALOG_RIGHT_Y));
-        }
-        else{
-        	float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
-		    float j3=controller.get_analog(ANALOG_LEFT_Y);
-            leftMotors.move(j3+j1);
-		    rightMotors.move(j3-j1);
-        }
+        float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
+		float j3=controller.get_analog(ANALOG_LEFT_Y);
 
-		
+		leftMotors.move(j3+j1);
+		rightMotors.move(j3-j1);
 
         
 
@@ -406,9 +467,6 @@ void opcontrol() {
 			LeftIntake.brake();
             RightIntake.brake();
 		}
-        if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)){
-            tankState++;
-        }
 
         pros::delay(50);
     }

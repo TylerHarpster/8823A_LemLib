@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Win Point",
+    "project_name": "New Left",
     "target": "v5",
     "templates": {
       "kernel": {
