@@ -265,6 +265,7 @@ void autonomous() {
     tonguePiston.set_value(false);
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
+    }
 
 
     if(std::get<touchscreen::button*>(touchscreen::screenList.at(0)->getButtons().at(1))->getParams().strokeColor==5){
