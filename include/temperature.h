@@ -12,10 +12,11 @@ enum autonRoute{
     skills,
     leftSide,
     rightSide,
-    smegSide
+    smegSide,
+    oldLeftSide
     
 };
-extern autonRoute selectedAuton;
+extern int selectedAuton;
 
 namespace touchscreen{
     enum buttonShapes{ //all shapes a button can be drawn in
@@ -197,9 +198,13 @@ namespace touchscreen{
                 }
                 std::printf("%i\n",pressedIndex);
             }
+            std::vector<std::variant<button*>> getButtons(){
+                return objectList;
+            }
     };
 
     extern std::vector<screen*> screenList;
+    extern int selectedAuton;
     void screenListInit();
     button lastPressed();
 }

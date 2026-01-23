@@ -3,6 +3,7 @@
 #include "api.h"
 // #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/screen.h"
 // #include "pros/screen.h"
 // #include "pros/screen.hpp"
 // controller
@@ -152,12 +153,8 @@ void ram(float speed){
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
-// enum autonRoute{
-//     skills,
-//     leftSide,
-//     rightSide
-// };
-// autonRoute selectedAuton=skills;
+
+int selectedAuton=0;
 void autonomous() {
 
     pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
@@ -168,65 +165,68 @@ void autonomous() {
 
     std::printf("gurt\n");
 
+
+    if(std::get<touchscreen::button*>(touchscreen::screenList.at(0)->getButtons().at(2))->getParams().strokeColor==5){
     // SIGNATURE WIN POINT
 
-    // // Moves to collect the cluster of three blocks
-    // retainerPiston.set_value(true);
-    // LeftIntake.move_velocity(600);
-    // RightIntake.move_velocity(600);
-    // chassis.moveToPose(18.000, 25.490, 42.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=40});
-    // pros::delay(500);
+    // Moves to collect the cluster of three blocks
+    retainerPiston.set_value(true);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    chassis.moveToPose(18.000, 25.490, 42.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=40});
+    pros::delay(500);
 
-    // // Move to align with long goal and score cluster
-    // chassis.moveToPose(43.500, -2.500, 110.377, 2500, {.forwards=true,.maxSpeed=127,.minSpeed=45});
-    // chassis.turnToHeading(180.138, 1500);
-    // chassis.moveToPose(37.500, 18.000, 180.000, 1000, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=45});
-    // retainerPiston.set_value(false);
-    // pros::delay(2500);
-    // LeftIntake.move_velocity(0);
-    // RightIntake.move_velocity(0);
-    // retainerPiston.set_value(true);
+    // Move to align with long goal and score cluster
+    chassis.moveToPose(43.500, -2.500, 110.377, 2500, {.forwards=true,.maxSpeed=127,.minSpeed=45});
+    chassis.turnToHeading(180.138, 1500);
+    chassis.moveToPose(37.500, 18.000, 180.000, 1000, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=45});
+    retainerPiston.set_value(false);
+    pros::delay(2500);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
+    retainerPiston.set_value(true);
 
-    // // Move forward and turn to face next block cluster
-    // chassis.moveToPose(39.500, 2.490, 180.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=20});
-    // chassis.moveToPose(12.463, 20.490, -45.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=20});
-    // LeftIntake.move_velocity(100);
-    // RightIntake.move_velocity(100);
+    // Move forward and turn to face next block cluster
+    chassis.moveToPose(39.500, 2.490, 180.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=20});
+    chassis.moveToPose(12.463, 20.490, -45.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=20});
+    LeftIntake.move_velocity(100);
+    RightIntake.move_velocity(100);
 
-    // // Collect other cluster and score in High Middle Goal
-    // chassis.moveToPose(-46.878, 23.685, -90.452, 3000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
-    // chassis.turnToHeading(-131.138, 1500);
-    // chassis.moveToPose(-26.500, 32.000, -131.138, 1300, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    // LeftIntake.move_velocity(-300);
-    // RightIntake.move_velocity(-300);
-    // pros::delay(250);
-    // middlePiston.set_value(true);
-    // LeftIntake.move_velocity(400);
-    // RightIntake.move_velocity(400);
-    // pros::delay(2500);
+    // Collect other cluster and score in High Middle Goal
+    chassis.moveToPose(-46.878, 23.685, -90.452, 3000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    chassis.turnToHeading(-131.138, 1500);
+    chassis.moveToPose(-26.500, 32.000, -131.138, 1300, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    LeftIntake.move_velocity(-300);
+    RightIntake.move_velocity(-300);
+    pros::delay(250);
+    middlePiston.set_value(true);
+    LeftIntake.move_velocity(400);
+    RightIntake.move_velocity(400);
+    pros::delay(2500);
 
-    // // Move towards loader and collect alliance's colored blocks
-    // LeftIntake.move_velocity(0);
-    // RightIntake.move_velocity(0);
-    // middlePiston.set_value(false);
-    // chassis.moveToPose(-65.285, 1.045, -131.138, 2000, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=20});
-    // chassis.turnToHeading(-172.032, 2000);
-    // tonguePiston.set_value(true);
-    // LeftIntake.move_velocity(400);
-    // RightIntake.move_velocity(400);
-    // chassis.moveToPose(-64.071, -28.750, -171.281, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    // Move towards loader and collect alliance's colored blocks
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
+    middlePiston.set_value(false);
+    chassis.moveToPose(-65.285, 1.045, -131.138, 2000, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=20});
+    chassis.turnToHeading(-172.032, 2000);
+    tonguePiston.set_value(true);
+    LeftIntake.move_velocity(400);
+    RightIntake.move_velocity(400);
+    chassis.moveToPose(-64.071, -28.750, -171.281, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
 
-    // // Score blocks from loader into long goal
-    // pros::delay(1500);
-    // LeftIntake.move_velocity(0);
-    // RightIntake.move_velocity(0);
-    // chassis.moveToPose(-60.750, 15.904, -173.217, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=20});
-    // retainerPiston.set_value(false);
-    // tonguePiston.set_value(false);
-    // LeftIntake.move_velocity(600);
-    // RightIntake.move_velocity(600);
+    // Score blocks from loader into long goal
+    pros::delay(1500);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
+    chassis.moveToPose(-60.750, 15.904, -173.217, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=20});
+    retainerPiston.set_value(false);
+    tonguePiston.set_value(false);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    }
 
-
+    if(std::get<touchscreen::button*>(touchscreen::screenList.at(0)->getButtons().at(0))->getParams().strokeColor==5){
     // NEW LEFT SIDE
 
     // Collect cluster and score in High Middle Goal
@@ -260,44 +260,46 @@ void autonomous() {
     chassis.moveToPose(-39.000, 10.904, -180.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
     retainerPiston.set_value(false);
     tonguePiston.set_value(false);
+    }
 
 
+    if(std::get<touchscreen::button*>(touchscreen::screenList.at(0)->getButtons().at(1))->getParams().strokeColor==5){
     // OLD RIGHT SIDE
     
-    // // Moves to collect the cluster of three blocks
-    // retainerPiston.set_value(true);
-    // LeftIntake.move_velocity(600);
-    // RightIntake.move_velocity(600);
-    // chassis.moveToPose(18.463, 25.490, 34.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
-    // pros::delay(500);
+    // Moves to collect the cluster of three blocks
+    retainerPiston.set_value(true);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    chassis.moveToPose(18.463, 25.490, 34.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    pros::delay(500);
 
-    // // Move to score cluster of three and preload in low goal
-    // chassis.moveToPose(-5.200, 35.650, -45.000, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
-    // LeftIntake.move_velocity(-60);
-    // RightIntake.move_velocity(-60);
-    // pros::delay(2000);
-    // LeftIntake.move_velocity(0);
-    // RightIntake.move_velocity(0);
+    // Move to score cluster of three and preload in low goal
+    chassis.moveToPose(-5.200, 35.650, -45.000, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=20});
+    LeftIntake.move_velocity(-60);
+    RightIntake.move_velocity(-60);
+    pros::delay(2000);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
 
-    // // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
-    // chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    // chassis.turnToHeading(182.000, 1500);
-    // tonguePiston.set_value(true);
-    // pros::delay(500);
+    // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
+    chassis.moveToPose(32.247, 0.731, -51.862, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.turnToHeading(182.000, 1500);
+    tonguePiston.set_value(true);
+    pros::delay(500);
 
-    // // Moves into the loader to unload and store the alliance's three colored blocks
-    // LeftIntake.move_velocity(600);
-    // RightIntake.move_velocity(600);
-    // chassis.moveToPose(35.229, -22.500, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
-    // pros::delay(500);
+    // Moves into the loader to unload and store the alliance's three colored blocks
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    chassis.moveToPose(35.229, -22.500, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
+    pros::delay(500);
 
-    // // Moves to long goal to score the three blocks from the loader
-    // chassis.moveToPose(35.500, 9.655, 183.504, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
-    // tonguePiston.set_value(false);
-    // retainerPiston.set_value(false);
+    // Moves to long goal to score the three blocks from the loader
+    chassis.moveToPose(35.500, 9.655, 183.504, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    tonguePiston.set_value(false);
+    retainerPiston.set_value(false);
+}
 
-
-    // OLD LEFT SIDE
+    // // OLD LEFT SIDE
 
     // // Moves to collect the cluster of three blocks
     // retainerPiston.set_value(true);
@@ -342,6 +344,7 @@ void autonomous() {
     // chassis.moveToPose(-22.871, -14.863, -265.214, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
     // chassis.moveToPose(20.000, -15.000, -265.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
 
+
 }
 
 /**
@@ -349,93 +352,31 @@ void autonomous() {
  */
 
 
-std::vector<touchscreen::button> buttons={};
+touchscreen::screen* activeScreen=touchscreen::screenList.at(0);
 
+int main(){
 
-
-
-
-void opcontrol() {
-    // touchscreen::button Button1(50,50,150,100,
-    //                     [](touchscreen::button self){
-    //                     selectedAuton=leftSide; 
-    //                     self.setState(1);
-    //                     self.setFillColor(0x00ff0000);
-    //                     printf("grereeeggr %i i\n",self.getState());},
-    //                     {.text="Left side",.fillColor=0x0000ffff});
-    //                     // Button1.setOnOther([](touchscreen::button self){
-    //                     // self.setFillColor(0x0000ffff); self.setState(0);});
-    //     touchscreen::button Button2(210,50,150,100,
-    //                     [](touchscreen::button self){
-    //                     selectedAuton=rightSide; 
-    //                     self.setState(1);
-    //                     self.setFillColor(0x00ff0000);
-    //                     printf("grereeeggr %i i\n",self.getState());},
-    //                     {.text="Right side",.fillColor=0x0000ffff});
-    //                     // Button1.setOnOther([](touchscreen::button self){
-    //                     // self.setFillColor(0x0000ffff); self.setState(0);});
-                        
-
-    // buttons.push_back(Button1); //VEX REFRENCE!!!
-    // buttons.push_back(Button2); //VEX REFRENCE!!!
-    
-
-    // // controller
-    // // loop to continuously update motors
-    // // pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
-    // pros::screen::touch_callback([](){
-    //     int pressedIndex=-1;
-    //     for(int i=0; i<buttons.size();i++){
-    //         if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
-    //            buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
-                    
-    //             buttons[i].runPress();
-    //             pressedIndex=i;
-    //             break;
-    //         }
-            
-    //     }
-    //     if(pressedIndex!=-1){
-    //         for(int i=0; i<buttons.size();i++){
-    //             if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
-    //             buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
-                        
-    //                 if(i!=pressedIndex) buttons[i].runOtherPress();
-    //             }
-    //         }
-    //     }
-    // },pros::last_touch_e_t::E_TOUCH_PRESSED);
-    chassis.cancelAllMotions();
-    chassis.setPose(0,0,0);
-    // int i=0;
+    int tankState;
     while (true) {
-    // switch(selectedAuton){
-    //     case leftSide:
-    //         Button1.setFillColor(0x00FF0000);
-    //         Button2.setFillColor(0x00A7A7A7);
-    //     break;
-    //     case rightSide:
-    //         Button2.setFillColor(0x00FF0000);
-    //         Button1.setFillColor(0x00A7A7A7);
-    //     break;
-    //     case skills:
-    //         Button1.setFillColor(0x00A7A7A7);
-    //         Button2.setFillColor(0x00A7A7A7);
-    //     break;
 
-    // }
-    //     pros::screen::erase();
-    //     Button1.draw();
-    //     Button2.draw();
+        pros::screen::erase();
+        activeScreen->draw();
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
-		float j3=controller.get_analog(ANALOG_LEFT_Y);
+        if(tankState%2==1){
+            leftMotors.move(controller.get_analog(ANALOG_LEFT_Y));
+            rightMotors.move(controller.get_analog(ANALOG_RIGHT_Y));
+        }
+        else{
+        	float j1=0.5*controller.get_analog(ANALOG_RIGHT_X);
+		    float j3=controller.get_analog(ANALOG_LEFT_Y);
+            leftMotors.move(j3+j1);
+		    rightMotors.move(j3-j1);
+        }
 
-		leftMotors.move(j3+j1);
-		rightMotors.move(j3-j1);
+		
 
         
 
@@ -467,6 +408,9 @@ void opcontrol() {
 			LeftIntake.brake();
             RightIntake.brake();
 		}
+        if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)){
+            tankState++;
+        }
 
         pros::delay(50);
     }
