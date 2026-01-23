@@ -238,7 +238,7 @@ void autonomous() {
     chassis.moveToPose(-1.250, 30.000, -141.138, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=37});
     LeftIntake.move_velocity(-380);
     RightIntake.move_velocity(-380);
-    pros::delay(275);
+    pros::delay(285);
     retainerPiston.set_value(false);
     middlePiston.set_value(true);
     LeftIntake.move_velocity(600);
@@ -249,17 +249,22 @@ void autonomous() {
     retainerPiston.set_value(true);
     middlePiston.set_value(false);
     chassis.moveToPose(-39.000, -3.245, -131.138, 2450, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=35});
-    chassis.turnToHeading(-185.032, 875);
+    chassis.turnToHeading(-185.032, 925);
     tonguePiston.set_value(true);
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
-    chassis.moveToPose(-38.500, -26.950, -181.281, 1750, {.forwards=true,.maxSpeed=127,.minSpeed=43});
+    chassis.moveToPose(-38.400, -28.800, -178.781, 1750, {.forwards=true,.maxSpeed=127,.minSpeed=43});
 
     // Score blocks from loader into long goal
-    pros::delay(500);
-    chassis.moveToPose(-39.000, 10.904, -180.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    pros::delay(475);
+    chassis.moveToPose(-39.600, 10.904, -179.500, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=45});
+    LeftIntake.move_velocity(-380);
+    RightIntake.move_velocity(-380);
+    pros::delay(150);
     retainerPiston.set_value(false);
     tonguePiston.set_value(false);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
 
 
     // OLD RIGHT SIDE
