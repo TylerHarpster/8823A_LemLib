@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "New Left",
+    "project_name": "Skills",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -83,7 +83,7 @@
     },
     "upload_options": {
       "icon": "pizza",
-      "slot": 1
+      "slot": 3
     },
     "use_early_access": false
   }
