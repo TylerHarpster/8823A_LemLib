@@ -3,10 +3,14 @@
 #include "api.h"
 // #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/rtos.hpp"
 #include "pros/screen.h"
+#include "pros/screen.hpp"
+#include <cstdio>
 // #include "pros/screen.h"
 // #include "pros/screen.hpp"
 // controller
+#define tuff_asf_boi 67
 
 
 int wingState=0; // variable for wing
@@ -100,17 +104,34 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
 
 
+touchscreen::screen* activeScreen;
+
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {
-    pros::lcd::initialize();
-    
-    chassis.calibrate(); // calibrate sensors
 
+ void initialize() {
+     pros::lcd::initialize();
+     
+     chassis.calibrate(); // calibrate sensors
+     activeScreen=touchscreen::screenList.at(0);
+     
+     
+    pros::screen::touch_callback([](){activeScreen->onPress();}, pros::last_touch_e_t::E_TOUCH_RELEASED);
+     pros::Task screenTask([](){
+        while(67==tuff_asf_boi){
+         pros::screen::erase();
+         activeScreen->draw();
+         std::printf("nigga spaghetti \n");
+         pros::delay(100);
+        }
+        });
+    
+        
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
     // lemlib::bufferedStdout().setRate(...);
@@ -125,7 +146,8 @@ void initialize() {
 /**
  * Runs while the robot is disabled
  */
-void disabled() {}
+void disabled() {
+}
 
 /**
  * runs after initialize if the robot is connected to field control
@@ -357,15 +379,15 @@ void autonomous() {
  */
 
 
-touchscreen::screen* activeScreen=touchscreen::screenList.at(0);
+
 
 int main(){
-
+    activeScreen=touchscreen::screenList.at(0);
     int tankState;
+    
+    
     while (true) {
 
-        pros::screen::erase();
-        activeScreen->draw();
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);

@@ -172,6 +172,7 @@ namespace touchscreen{
                     if(std::holds_alternative<button*>(objectList.at(i))){
                         button* btn=std::get<button*>(objectList.at(i));
                         btn->draw();
+                        printf("draw\n");
                     }
                 }
             }
