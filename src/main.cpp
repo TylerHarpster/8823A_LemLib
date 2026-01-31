@@ -115,10 +115,10 @@ touchscreen::screen* activeScreen;
  */
 
  void initialize() {
-     pros::lcd::initialize();
+    //  pros::lcd::initialize();
      
      chassis.calibrate(); // calibrate sensors
-     activeScreen=touchscreen::screenList.at(0);
+    //  activeScreen=touchscreen::screenList.at(0);
      
      
     // pros::screen::touch_callback([](){activeScreen->onPress();}, pros::last_touch_e_t::E_TOUCH_RELEASED);
@@ -252,7 +252,6 @@ void autonomous() {
 
 
     // NEW LEFT SIDE
-
     // // Collect cluster
     // retainerPiston.set_value(true);
     // LeftIntake.move_velocity(600);
