@@ -14,11 +14,14 @@ namespace touchscreen{
                         50,
                         [](button* self){
                             self->setStrokeWeight(5);
+                            self->setState(1);
                         },
                         [](button* self){
                             self->setStrokeWeight(0);
+                            self->setState(0);
                         },
                         {
+                            .strokeWeight=0,
                             .text="Left Side",
                             .fillColor=0x00001ff0
                         }
@@ -31,11 +34,14 @@ namespace touchscreen{
                         50,
                         [](button* self){
                             self->setStrokeWeight(5);
+                            self->setState(1);
                         },
                         [](button* self){
                             self->setStrokeWeight(0);
+                            self->setState(0);
                         },
                         {
+                            .strokeWeight=0,
                             .text="Right Side",
                             .fillColor=0x00A00001,
         
@@ -49,38 +55,39 @@ namespace touchscreen{
                         50,
                         [](button* self){
                             self->setStrokeWeight(5);
+                            self->setState(1);
                         },
                         [](button* self){
                             self->setStrokeWeight(0);
+                            self->setState(0);
                         },
                         {
+                            .strokeWeight=0,
                             .text="Win point",
                             .fillColor=0x00ddddaa
                             
                         }
         
-                    )
+                    ),
                 }),
-        
-                new screen ({
+                                new screen ({
                     new button(
                         10,
                         10,
                         200,
                         50,
                         [](button* self){
-                            int state=self->getState();
-                            self->setFillColor(0x00FF0F00);
-                            if(state%2==1) self->setFillColor(0x00000FFF);
-                            self->setState(state+1);
-                            printf("ran my ts \n");
+                            self->setStrokeWeight(5);
+                            self->setState(1);
                         },
                         [](button* self){
-                            
+                            self->setStrokeWeight(0);
+                            self->setState(0);
                         },
                         {
-                            .text="I'm a toggle",
-                            .fillColor=0x00FF0F00
+                            .strokeWeight=0,
+                            .text="Left Side",
+                            .fillColor=0x00001ff0
                         }
         
                     ),
@@ -90,16 +97,17 @@ namespace touchscreen{
                         200,
                         50,
                         [](button* self){
-                            self->setFillColor(0x00F0F0F0);
-                            self->setState(self->getState()+1);
-                            self->setText(std::string("I'm a counter ")+std::to_string(self->getState()));
+                            self->setStrokeWeight(5);
+                            self->setState(1);
                         },
                         [](button* self){
-                            
+                            self->setStrokeWeight(0);
+                            self->setState(0);
                         },
                         {
-                            .text="I'm a counter",
-                            .fillColor=0x00F0F0F0,
+                            .strokeWeight=0,
+                            .text="Right Side",
+                            .fillColor=0x00A00001,
         
                         }
         
@@ -110,26 +118,24 @@ namespace touchscreen{
                         200,
                         50,
                         [](button* self){
-                            self->setFillColor(0x00FFFF00);
+                            self->setStrokeWeight(5);
                             self->setState(1);
                         },
                         [](button* self){
-                            self->setFillColor(0x00FF0000);
+                            self->setStrokeWeight(0);
                             self->setState(0);
                         },
                         {
-                            .text="I'm deselectable",
-                            .fillColor=0x00FF0000
+                            .strokeWeight=0,
+                            .text="Win point",
+                            .fillColor=0x00ddddaa
                             
                         }
         
-                    )
-                })
+                    ),
+                }),
 
-
-
-
-
+        
 
 
 

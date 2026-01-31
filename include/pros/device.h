@@ -81,7 +81,7 @@ typedef enum v5_device_e {
  * \endcode
 */
 v5_device_e_t get_plugged_type(uint8_t port);
-
+#define tuff_asf_boi 67
 ///@}
 
 #ifdef __cplusplus

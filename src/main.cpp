@@ -10,7 +10,7 @@
 // #include "pros/screen.h"
 // #include "pros/screen.hpp"
 // controller
-#define tuff_asf_boi 67
+
 
 
 int wingState=0; // variable for wing
@@ -126,7 +126,6 @@ touchscreen::screen* activeScreen;
         while(67==tuff_asf_boi){
          pros::screen::erase();
          activeScreen->draw();
-         std::printf("nigga spaghetti \n");
          pros::delay(100);
         }
         });
@@ -516,12 +515,16 @@ void autonomous() {
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
     retainerPiston.set_value(true);
-    chassis.moveToPose(0, 10, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(38.047, -4.731, 150.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    chassis.moveToPose(0, 5, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=100,.earlyExitRange=2});
+    chassis.turnToPoint(37.250, -4.731, 5000);
+    chassis.moveToPoint(37.250, -4.731, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=50});
+    chassis.turnToHeading(180,5000);
     tonguePiston.set_value(true);
-    chassis.moveToPose(36.250, -30.800, 180.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(37.247, -17.731, 180.000, 4000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    tonguePiston.set_value(false);
+    chassis.moveToPose(32.250, -27.800, 180.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=50});
+    chassis.moveToPose(32.250, -24.800, 180.000, 300, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=50});
+    chassis.moveToPose(32.250, -27.800, 180.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=50});
+    chassis.moveToPose(32.250, -17.731, 180.000, 4000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=50});
+    // tonguePiston.set_value(false);
 
     chassis.turnToHeading(-90, 4000);
     chassis.moveToPose(22.747, 30.731, 0.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
@@ -536,9 +539,9 @@ void autonomous() {
     RightIntake.move_velocity(600);
     pros::delay(3500);
     retainerPiston.set_value(true);
-    tonguePiston.set_value(true);
-    chassis.moveToPose(45.000, 114.731, 0.000, 4000, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=30});
-    chassis.moveToPose(43.247, 68.231, 0.000, 4000, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=30});
+    // tonguePiston.set_value(true);
+    chassis.moveToPose(45.000, 110.731, 0.000, 4000, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=30});
+    chassis.moveToPose(43.247, 66.231, 0.000, 4000, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=30});
     retainerPiston.set_value(false);
     LeftIntake.move_velocity(-300);
     RightIntake.move_velocity(-300);
