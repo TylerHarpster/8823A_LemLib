@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Skills",
+    "project_name": "Driveode",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -82,8 +82,8 @@
       }
     },
     "upload_options": {
-      "icon": "pizza",
-      "slot": 3
+      "icon": "power",
+      "slot": 4
     },
     "use_early_access": false
   }

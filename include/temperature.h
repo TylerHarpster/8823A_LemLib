@@ -160,6 +160,16 @@ namespace touchscreen{
         
     };
 
+    class buttonArray{
+        private:
+        std::vector<button*> buttonList;
+        int x,y,xscl,yscl;
+        public:
+            
+
+
+    };
+
     class screen{
         private:
             std::vector<std::variant<button*>> objectList;
@@ -172,6 +182,7 @@ namespace touchscreen{
                     if(std::holds_alternative<button*>(objectList.at(i))){
                         button* btn=std::get<button*>(objectList.at(i));
                         btn->draw();
+                        printf("draw\n");
                     }
                 }
             }

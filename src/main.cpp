@@ -3,9 +3,14 @@
 #include "api.h"
 // #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/rtos.hpp"
+#include "pros/screen.h"
+#include "pros/screen.hpp"
+#include <cstdio>
 // #include "pros/screen.h"
 // #include "pros/screen.hpp"
 // controller
+
 
 
 int wingState=0; // variable for wing
@@ -99,17 +104,34 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
 
 
+touchscreen::screen* activeScreen;
+
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {
-    pros::lcd::initialize();
-    
-    chassis.calibrate(); // calibrate sensors
 
+ void initialize() {
+    //  pros::lcd::initialize();
+     
+     chassis.calibrate(); // calibrate sensors
+    //  activeScreen=touchscreen::screenList.at(0);
+     
+     
+    // pros::screen::touch_callback([](){activeScreen->onPress();}, pros::last_touch_e_t::E_TOUCH_RELEASED);
+    //  pros::Task screenTask([](){
+    //     while(67==tuff_asf_boi){
+    //      pros::screen::erase();
+    //      activeScreen->draw();
+    //      pros::delay(100);
+    //     }
+    //     });
+    
+    
+        
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
     // lemlib::bufferedStdout().setRate(...);
@@ -124,7 +146,8 @@ void initialize() {
 /**
  * Runs while the robot is disabled
  */
-void disabled() {}
+void disabled() {
+}
 
 /**
  * runs after initialize if the robot is connected to field control
@@ -229,7 +252,6 @@ void autonomous() {
 
 
     // NEW LEFT SIDE
-
     // // Collect cluster
     // retainerPiston.set_value(true);
     // LeftIntake.move_velocity(600);
@@ -575,67 +597,12 @@ void autonomous() {
  */
 
 
-std::vector<touchscreen::button> buttons={};
 
-
-
-
-
-void opcontrol() {
-    // touchscreen::button Button1(50,50,150,100,
-    //                     [](touchscreen::button self){
-    //                     selectedAuton=leftSide; 
-    //                     self.setState(1);
-    //                     self.setFillColor(0x00ff0000);
-    //                     printf("grereeeggr %i i\n",self.getState());},
-    //                     {.text="Left side",.fillColor=0x0000ffff});
-    //                     // Button1.setOnOther([](touchscreen::button self){
-    //                     // self.setFillColor(0x0000ffff); self.setState(0);});
-    //     touchscreen::button Button2(210,50,150,100,
-    //                     [](touchscreen::button self){
-    //                     selectedAuton=rightSide; 
-    //                     self.setState(1);
-    //                     self.setFillColor(0x00ff0000);
-    //                     printf("grereeeggr %i i\n",self.getState());},
-    //                     {.text="Right side",.fillColor=0x0000ffff});
-    //                     // Button1.setOnOther([](touchscreen::button self){
-    //                     // self.setFillColor(0x0000ffff); self.setState(0);});
-                        
-
-    // buttons.push_back(Button1); //VEX REFRENCE!!!
-    // buttons.push_back(Button2); //VEX REFRENCE!!!
+int tankState=0;
+int main(){
     
-
-    // // controller
-    // // loop to continuously update motors
-    // // pros::Task adsjfdsjf([](){while(1){std::printf("%.3f, %.3f, %.3f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
-    // pros::screen::touch_callback([](){
-    //     int pressedIndex=-1;
-    //     for(int i=0; i<buttons.size();i++){
-    //         if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
-    //            buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
-                    
-    //             buttons[i].runPress();
-    //             pressedIndex=i;
-    //             break;
-    //         }
-            
-    //     }
-    //     if(pressedIndex!=-1){
-    //         for(int i=0; i<buttons.size();i++){
-    //             if(buttons[i].getX()<pros::screen::touch_status().x && buttons[i].getX()+buttons[i].getXscl()>pros::screen::touch_status().x &&
-    //             buttons[i].getY()<pros::screen::touch_status().y && buttons[i].getY()+buttons[i].getYscl()>pros::screen::touch_status().y){
-                        
-    //                 if(i!=pressedIndex) buttons[i].runOtherPress();
-    //             }
-    //         }
-    //     }
-    // },pros::last_touch_e_t::E_TOUCH_PRESSED);
-    chassis.cancelAllMotions();
-    chassis.setPose(0,0,0);
-    int tankState=0;
+    
     while (true) {
-
 
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
