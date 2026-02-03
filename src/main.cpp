@@ -122,14 +122,17 @@ touchscreen::screen* activeScreen;
      
      
     // pros::screen::touch_callback([](){activeScreen->onPress();}, pros::last_touch_e_t::E_TOUCH_RELEASED);
-    //  pros::Task screenTask([](){
+
+    // std::printf("smeggy \n");
+    // pros::Task screenTask([](){
     //     while(67==tuff_asf_boi){
-    //      pros::screen::erase();
-    //      activeScreen->draw();
-    //      pros::delay(100);
+    //         pros::screen::erase();
+    //         activeScreen->draw();
+    //         pros::delay(10000);
     //     }
-    //     });
-    
+    // });
+        
+    // std::printf("rizzy \n");
     
         
     // the default rate is 50. however, if you need to change the rate, you
