@@ -188,7 +188,7 @@ void ram(float speed){
 // autonRoute selectedAuton=skills;
 void autonomous() {
 
-    pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    // pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
 
     chassis.setPose(0, 0, 0);
 
@@ -529,19 +529,20 @@ void autonomous() {
     chassis.moveToPose(35.000, -29.800, 185.000, 4500, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=40});
     chassis.moveToPose(35.000, -28.000, 185.000, 750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     chassis.moveToPose(35.000, -29.800, 185.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    LeftIntake.move_velocity(0);
-    RightIntake.move_velocity(0);
     chassis.moveToPose(35.500, -11.000, 185.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     tonguePiston.set_value(false);
+    LeftIntake.move_velocity(0);
+    RightIntake.move_velocity(0);
 
     chassis.turnToHeading(-90, 1000);
-    chassis.moveToPose(27.250, -10.250, -90.000, 750, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(27.000, 30.731, 2.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(27.250, 74.731, 2.000, 3000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPoint(20.250, -10.250, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(20.000, 30.731, 2.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(20.250, 74.731, 2.000, 3000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     chassis.turnToHeading(55, 1000);
 
-    chassis.moveToPose(43.547, 90.731, 0.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(38.750, 72.000, 0.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(33.00, 90., 0.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(33.00, 72., 0.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // chassis.moveToPoint(31., 72.000, 0.000, {.forwards=false,.maxSpeed=127,.minSpeed=35});
     tonguePiston.set_value(true);
     retainerPiston.set_value(false);
     LeftIntake.move_velocity(600);
