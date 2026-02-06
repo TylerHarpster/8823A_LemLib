@@ -69,7 +69,7 @@ lemlib::ControllerSettings linearcontroller(0.2, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularcontroller(0.88, // proportional gain (kP)
+lemlib::ControllerSettings angularcontroller(0.95, // proportional gain (kP)
                                              0, // integral gain (kI)
                                              1.54, // derivative gain (kD)
                                              0, // anti windup
@@ -526,22 +526,22 @@ void autonomous() {
     // chassis.turnToHeading(180, 1000);
 
     tonguePiston.set_value(true);
-    chassis.moveToPose(35.000, -30.200, 185.000, 4500, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(35.000, -29.800, 185.000, 4500, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=40});
     chassis.moveToPose(35.000, -28.000, 185.000, 750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(35.000, -30.200, 185.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(35.000, -29.800, 185.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     LeftIntake.move_velocity(0);
     RightIntake.move_velocity(0);
     chassis.moveToPose(35.500, -11.000, 185.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     tonguePiston.set_value(false);
 
     chassis.turnToHeading(-90, 1000);
-    chassis.moveToPose(28.750, -10.250, -90.000, 750, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(28.000, 30.731, 4.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(28.500, 74.731, 4.000, 3000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.turnToHeading(75, 1000);
+    chassis.moveToPose(27.250, -10.250, -90.000, 750, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(27.000, 30.731, 2.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(27.250, 74.731, 2.000, 3000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.turnToHeading(55, 1000);
 
     chassis.moveToPose(43.547, 90.731, 0.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(43.500, 72.000, 0.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(38.750, 72.000, 0.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     tonguePiston.set_value(true);
     retainerPiston.set_value(false);
     LeftIntake.move_velocity(600);
@@ -555,9 +555,9 @@ void autonomous() {
     pros::delay(3500);
     retainerPiston.set_value(true);
 
-    chassis.moveToPose(44.500, 112.500, 4.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(43.500, 112.500, 4.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     pros::delay(2000);
-    chassis.moveToPose(43.047, 70.500, 4.000, 2500, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(38.047, 70.500, 4.000, 2500, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=35});
     retainerPiston.set_value(false);
     pros::delay(1000);
     LeftIntake.move_velocity(-300);
