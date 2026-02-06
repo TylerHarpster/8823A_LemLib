@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cstdio>
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/logger/logger.hpp"
 #include "lemlib/timer.hpp"
@@ -151,7 +152,12 @@ void lemlib::Chassis::moveToPose(float x, float y, float theta, int timeout, Mov
         // delay to save resources
         pros::delay(10);
     }
-
+    if(timer.isDone()){
+        std::printf("early exit");
+    }
+    else{
+        std::printf("normal exit, %i ms",timer.getTimePassed());
+    }
     // stop the drivetrain
     drivetrain.leftMotors->move(0);
     drivetrain.rightMotors->move(0);

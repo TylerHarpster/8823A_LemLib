@@ -118,8 +118,6 @@ namespace touchscreen{
                     default:
                         if(x<pros::screen::touch_status().x && x+xscl>pros::screen::touch_status().x &&
                         y<pros::screen::touch_status().y && y+yscl>pros::screen::touch_status().y){
-                            std::cout << pros::screen::touch_status().x << " ";
-                            std::cout << pros::screen::touch_status().y << "\n";
                             return true;
                         }
                     break;
@@ -160,21 +158,11 @@ namespace touchscreen{
         
     };
 
-    class buttonArray{
-        private:
-        std::vector<button*> buttonList;
-        int x,y,xscl,yscl;
-        public:
-            
-
-
-    };
-
     class screen{
         private:
-            std::vector<std::variant<button*>> objectList;
+            std::vector<std::variant<button*,screen*>> objectList;
         public:
-            screen(std::vector<std::variant<button*>> objectList){
+            screen(std::vector<std::variant<button*,screen*>> objectList){
                 this->objectList=objectList;
             }
             void draw(){
@@ -182,7 +170,7 @@ namespace touchscreen{
                     if(std::holds_alternative<button*>(objectList.at(i))){
                         button* btn=std::get<button*>(objectList.at(i));
                         btn->draw();
-                        printf("draw\n");
+                        
                     }
                 }
             }
@@ -193,10 +181,13 @@ namespace touchscreen{
                     button* btn=std::get<button*>(objectList.at(i));
                         
                         if(btn -> isPressed()){btn->runPress();
-                        std::printf("press at %i\n",i);
                         pressedIndex=i;
                         break;
                         }
+                    }
+                    else if(std::holds_alternative<screen*>(objectList.at(i))){
+                    screen* scr=std::get<screen*>(objectList.at(i));
+                        scr->onPress();
                     }
                 }
                 if(pressedIndex!=-1){
@@ -209,11 +200,14 @@ namespace touchscreen{
                 }
                 std::printf("%i\n",pressedIndex);
             }
-            std::vector<std::variant<button*>> getButtons(){
+            std::vector<std::variant<button*,screen*>> getObjects(){
                 return objectList;
             }
+            void addObject(std::variant<button*,screen*> obj){
+                objectList.push_back(obj); //VEX REFRENCE!!!
+            }
     };
-
+    extern screen* testScreen;
     extern std::vector<screen*> screenList;
     extern int selectedAuton;
     void screenListInit();

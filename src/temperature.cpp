@@ -1,8 +1,29 @@
 #include "main.h"
+#include "pros/screen.h"
+#include "pros/screen.hpp"
+#include <cstddef>
 #include <string>
 #include <bits/stdc++.h>
 
 namespace touchscreen{
+    screen* testScreen=new screen({
+        new button(0,0,480,240,[](button* self){
+            
+            if(self->getState()==0){
+                self->setState(pros::screen::touch_status().x*100000+pros::screen::touch_status().y);
+            }
+            else{
+                int x=self->getState()/100000;
+                int y=self->getState()%1000;
+                testScreen->addObject(new button(x,y,pros::screen::touch_status().x-x,pros::screen::touch_status().y-y,[](button* self){
+                    std::printf("x: %i | y: %i | w: %i | h: %i",self->getX(),self->getY(),self->getXscl(),self->getYscl());
+                },{},{}));
+            }
+        },{},{.fillColor=0x00000000})
+    });
+    // screen* motorScreen=new screen({
+    //     new button()
+    // });
 
     std::vector<screen*> screenList={
         

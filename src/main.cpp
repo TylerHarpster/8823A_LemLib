@@ -118,19 +118,19 @@ touchscreen::screen* activeScreen;
     //  pros::lcd::initialize();
      
      chassis.calibrate(); // calibrate sensors
-    //  activeScreen=touchscreen::screenList.at(0);
+     activeScreen=touchscreen::testScreen;
      
      
-    // pros::screen::touch_callback([](){activeScreen->onPress();}, pros::last_touch_e_t::E_TOUCH_RELEASED);
+    pros::screen::touch_callback([](){activeScreen->onPress();}, pros::last_touch_e_t::E_TOUCH_RELEASED);
 
-    // std::printf("smeggy \n");
-    // pros::Task screenTask([](){
-    //     while(67==tuff_asf_boi){
-    //         pros::screen::erase();
-    //         activeScreen->draw();
-    //         pros::delay(10000);
-    //     }
-    // });
+    std::printf("smeggy \n");
+    pros::Task screenTask([](){
+        while(67==tuff_asf_boi){
+            pros::screen::erase();
+            activeScreen->draw();
+            pros::delay(10000);
+        }
+    });
         
     // std::printf("rizzy \n");
     
