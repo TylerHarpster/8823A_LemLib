@@ -208,6 +208,7 @@ namespace touchscreen{
             }
     };
     extern screen* testScreen;
+    extern screen* autonScreen;
     extern std::vector<screen*> screenList;
     extern int selectedAuton;
     void screenListInit();

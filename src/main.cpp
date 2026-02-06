@@ -120,7 +120,7 @@ touchscreen::screen* activeScreen;
      chassis.calibrate(); // calibrate sensors
      retainerPiston.set_value(true); // start with retainer down
 
-     activeScreen=touchscreen::testScreen;
+     activeScreen=touchscreen::autonScreen;
      
      
     pros::screen::touch_callback([](){activeScreen->onPress();}, pros::last_touch_e_t::E_TOUCH_RELEASED);
@@ -657,28 +657,6 @@ void opcontrol() {
 
 		leftMotors.move(j3+j1);
 		rightMotors.move(j3-j1);
-    // switch(selectedAuton){
-    //     case leftSide:
-    //         Button1.setFillColor(0x00FF0000);
-    //         Button2.setFillColor(0x00A7A7A7);
-    //     break;
-    //     case rightSide:
-    //         Button2.setFillColor(0x00FF0000);
-    //         Button1.setFillColor(0x00A7A7A7);
-    //     break;
-    //     case skills:
-    //         Button1.setFillColor(0x00A7A7A7);
-    //         Button2.setFillColor(0x00A7A7A7);
-    //     break;
-
-    // }
-    //     pros::screen::erase();
-    //     Button1.draw();
-    //     Button2.draw();
-        // get joystick positions
-
-
-        
 
         if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_POWER)){
             std::printf("x %f   y %f   t %f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta);
