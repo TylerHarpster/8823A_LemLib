@@ -89,6 +89,27 @@ namespace touchscreen{
                         }
         
                     ),
+                    new button(
+                        10,
+                        190,
+                        200,
+                        50,
+                        [](button* self){
+                            self->setStrokeWeight(5);
+                            self->setState(1);
+                        },
+                        [](button* self){
+                            self->setStrokeWeight(0);
+                            self->setState(0);
+                        },
+                        {
+                            .strokeWeight=0,
+                            .text="Move backwards",
+                            .fillColor=0x00001067
+                            
+                        }
+        
+                    ),
                 });
 
         
