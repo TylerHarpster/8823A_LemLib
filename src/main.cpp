@@ -58,13 +58,13 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearcontroller(0.2, // proportional gain (kP)
-                                            0, // integral gain (kI)
-                                            3, // derivative gain (kD)
-                                            0, // anti windup
-                                            0.25, // small error range, in inches,
+lemlib::ControllerSettings linearcontroller(2.95, // proportional gain (kP)
+                                            1.63, // integral gain (kI)
+                                            9, // derivative gain (kD)
+                                            6.3, // anti windup
+                                            0, // small error range, in inches,
                                             100, // small error range timeout, in milliseconds
-                                            2, // large error range, in inches
+                                            0, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
                                             0 // maximum acceleration (slew)
 );
@@ -189,7 +189,7 @@ void ram(float speed){
 // autonRoute selectedAuton=skills;
 void autonomous() {
 
-    // pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
+    pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
 
     chassis.setPose(0, 0, 0);
 
@@ -367,69 +367,37 @@ void autonomous() {
     // NEW SKILLS
     else {
 
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    retainerPiston.set_value(true);
-    chassis.moveToPose(0, 10, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=25});
-    chassis.moveToPose(38.047, -4.000, 170.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
-    // chassis.turnToHeading(180, 1000);
-
-    tonguePiston.set_value(true);
-    chassis.moveToPose(34.900, -29.800, 180.000, 4500, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(34.900, -28.000, 180.000, 750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=40});
-    chassis.moveToPose(34.900, -29.800, 180.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
-    LeftIntake.move_velocity(0);
-    RightIntake.move_velocity(0);
-    chassis.moveToPose(34.900, -17.000, 180.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    tonguePiston.set_value(false);
-
-    chassis.turnToHeading(-90, 1000);
-    chassis.moveToPose(25.800, -10.250, -90.000, 750, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(25.000, 30.731, 2.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(25.000, 74.731, 2.000, 3000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
-    chassis.turnToHeading(55, 1000);
-
-    chassis.moveToPose(43.547, 90.731, 0.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(39.500, 72.000, 3.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    tonguePiston.set_value(true);
-    retainerPiston.set_value(false);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    pros::delay(1000);
-    LeftIntake.move_velocity(-300);
-    RightIntake.move_velocity(-300);
-    pros::delay(250);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    pros::delay(3500);
-    retainerPiston.set_value(true);
-
-    chassis.moveToPose(39.750, 112.500, 0.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    pros::delay(2000);
-    chassis.moveToPose(39.500, 70.500, 3.000, 2500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    retainerPiston.set_value(false);
-    pros::delay(1000);
-    LeftIntake.move_velocity(-300);
-    RightIntake.move_velocity(-300);
-    pros::delay(250);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    pros::delay(3500);
-    // retainerPiston.set_value(true);
-    tonguePiston.set_value(false);
-
-    LeftIntake.move_velocity(0);
-    RightIntake.move_velocity(0);
-    // chassis.moveToPose(42.047, 77.731, 1.000, 2500, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=35});
-    // chassis.moveToPose(-13.247, 81.731, -90.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
-    // chassis.moveToPose(-58.247, 82.731, -90.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
-    // tonguePiston.set_value(true);
+    chassis.moveToPose(0, 24, 0, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
 
     // LeftIntake.move_velocity(600);
     // RightIntake.move_velocity(600);
-    // chassis.moveToPose(-53.247, 115.731, 0.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
-    // chassis.moveToPose(-53.247, 66.731, 0.000, 4000, {.forwards=false,.maxSpeed=127,.minSpeed=30});
+    // retainerPiston.set_value(true);
+    // chassis.moveToPose(0, 10, 0, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    // chassis.moveToPose(35.047, -8.000, 170.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=40});
+    // // chassis.turnToHeading(180, 1000);
+
+    // tonguePiston.set_value(true);
+    // chassis.moveToPose(34.900, -29.750, 180.000, 3000, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=35});
+    // // chassis.moveToPose(34.900, -28.000, 180.000, 750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=40});
+    // // chassis.moveToPose(34.900, -29.500, 180.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
+    // pros::delay(2000);
+    // LeftIntake.move_velocity(0);
+    // RightIntake.move_velocity(0);
+    // chassis.moveToPose(34.900, -17.000, 180.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // tonguePiston.set_value(false);
+
+    // chassis.turnToHeading(-90, 1000);
+    // chassis.moveToPose(25.800, -10.250, -90.000, 750, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // chassis.moveToPose(25.000, 30.731, 2.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
+    // chassis.moveToPose(25.000, 74.731, 2.000, 3000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
+    // chassis.turnToHeading(55, 1000);
+
+    // chassis.moveToPose(44.000, 90.731, 0.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // chassis.moveToPose(39.500, 72.000, 3.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // tonguePiston.set_value(true);
     // retainerPiston.set_value(false);
+    // LeftIntake.move_velocity(600);
+    // RightIntake.move_velocity(600);
     // pros::delay(1000);
     // LeftIntake.move_velocity(-300);
     // RightIntake.move_velocity(-300);
@@ -438,56 +406,96 @@ void autonomous() {
     // RightIntake.move_velocity(600);
     // pros::delay(3500);
     // retainerPiston.set_value(true);
+
+    // chassis.moveToPose(39.750, 112.500, 0.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // pros::delay(2000);
+    // chassis.moveToPose(39.500, 70.500, 3.000, 2500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // retainerPiston.set_value(false);
+    // pros::delay(1000);
+    // LeftIntake.move_velocity(-300);
+    // RightIntake.move_velocity(-300);
+    // pros::delay(250);
+    // LeftIntake.move_velocity(600);
+    // RightIntake.move_velocity(600);
+    // pros::delay(2500);
+    // LeftIntake.move_velocity(-300);
+    // RightIntake.move_velocity(-300);
+    // pros::delay(250);
+    // LeftIntake.move_velocity(600);
+    // RightIntake.move_velocity(600);
+    // pros::delay(2250);
+    // // retainerPiston.set_value(true);
     // tonguePiston.set_value(false);
 
     // LeftIntake.move_velocity(0);
     // RightIntake.move_velocity(0);
-    // chassis.moveToPose(-53.047, 77.731, 1.000, 2500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
-    // chassis.turnToHeading(90, 1000);
-    // chassis.moveToPose(-45.247, 77.731, 90.000, 1000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    // // chassis.moveToPose(42.047, 77.731, 1.000, 2500, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=35});
+    // // chassis.moveToPose(-13.247, 81.731, -90.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    // // chassis.moveToPose(-58.247, 82.731, -90.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    // // tonguePiston.set_value(true);
 
-    // chassis.moveToPose(-45.247, 55.731, 165.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
-    // chassis.moveToPose(-45.247, 4.731, 169.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    // // LeftIntake.move_velocity(600);
+    // // RightIntake.move_velocity(600);
+    // // chassis.moveToPose(-53.247, 115.731, 0.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
+    // // chassis.moveToPose(-53.247, 66.731, 0.000, 4000, {.forwards=false,.maxSpeed=127,.minSpeed=30});
+    // // retainerPiston.set_value(false);
+    // // pros::delay(1000);
+    // // LeftIntake.move_velocity(-300);
+    // // RightIntake.move_velocity(-300);
+    // // pros::delay(250);
+    // // LeftIntake.move_velocity(600);
+    // // RightIntake.move_velocity(600);
+    // // pros::delay(3500);
+    // // retainerPiston.set_value(true);
+    // // tonguePiston.set_value(false);
 
-    // chassis.moveToPose(-55.247, -3.731, 163.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
-    // chassis.moveToPose(-55.247, 9.731, 140.000, 4000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=30});
-    // tonguePiston.set_value(true);
-    // retainerPiston.set_value(false);
-    // pros::delay(1000);
-    // LeftIntake.move_velocity(-300);
-    // RightIntake.move_velocity(-300);
-    // pros::delay(250);
+    // // LeftIntake.move_velocity(0);
+    // // RightIntake.move_velocity(0);
+    // // chassis.moveToPose(-53.047, 77.731, 1.000, 2500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // // chassis.turnToHeading(90, 1000);
+    // // chassis.moveToPose(-45.247, 77.731, 90.000, 1000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+
+    // // chassis.moveToPose(-45.247, 55.731, 165.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    // // chassis.moveToPose(-45.247, 4.731, 169.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+
+    // // chassis.moveToPose(-55.247, -3.731, 163.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    // // chassis.moveToPose(-55.247, 9.731, 140.000, 4000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=30});
+    // // tonguePiston.set_value(true);
+    // // retainerPiston.set_value(false);
+    // // pros::delay(1000);
+    // // LeftIntake.move_velocity(-300);
+    // // RightIntake.move_velocity(-300);
+    // // pros::delay(250);
+    // // LeftIntake.move_velocity(600);
+    // // RightIntake.move_velocity(600);
+    // // pros::delay(3500);
+    // // retainerPiston.set_value(true);
+
+    // // chassis.moveToPose(-55.247, -22.731, 163.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=30});
+    // // chassis.moveToPose(-55.247, 10.731, 140.000, 4000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=30});
+    // // retainerPiston.set_value(false);
+    // // pros::delay(1000);
+    // // LeftIntake.move_velocity(-300);
+    // // RightIntake.move_velocity(-300);
+    // // pros::delay(250);
+    // // LeftIntake.move_velocity(600);
+    // // RightIntake.move_velocity(600);
+    // // pros::delay(3500);
+    // // retainerPiston.set_value(true);
+    // // tonguePiston.set_value(false);
+
+    // // chassis.moveToPose(-30.247, -28.731, 139.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+    // // chassis.moveToPose(-48.247, -7.731, 140.000, 4000, {.forwards=false,.maxSpeed=127,.minSpeed=30});
+
+    // chassis.moveToPose(39.500, 83.500, 3.000, 2500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    // chassis.moveToPose(24.800, 74.731, 180.000, 3000, {.forwards=true,.lead=0.5,.maxSpeed=127,.minSpeed=35});
+    // chassis.moveToPose(24.800, 10.731, 180.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=40});
+    
     // LeftIntake.move_velocity(600);
     // RightIntake.move_velocity(600);
-    // pros::delay(3500);
-    // retainerPiston.set_value(true);
-
-    // chassis.moveToPose(-55.247, -22.731, 163.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=30});
-    // chassis.moveToPose(-55.247, 10.731, 140.000, 4000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=30});
-    // retainerPiston.set_value(false);
-    // pros::delay(1000);
-    // LeftIntake.move_velocity(-300);
-    // RightIntake.move_velocity(-300);
-    // pros::delay(250);
-    // LeftIntake.move_velocity(600);
-    // RightIntake.move_velocity(600);
-    // pros::delay(3500);
-    // retainerPiston.set_value(true);
-    // tonguePiston.set_value(false);
-
-    // chassis.moveToPose(-30.247, -28.731, 139.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
-    // chassis.moveToPose(-48.247, -7.731, 140.000, 4000, {.forwards=false,.maxSpeed=127,.minSpeed=30});
-
-    chassis.moveToPose(39.500, 83.500, 3.000, 2500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(24.800, 74.731, 180.000, 3000, {.forwards=true,.lead=0.5,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(24.800, 9.731, 180.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=40});
-    
-
-    
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    chassis.moveToPose(-2.000, 3.000, 180.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=50});
-    chassis.moveToPose(-2.000, -100.731, 180.000, 1250, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=127});
+    // chassis.moveToPose(-14.000, 6.000, -90.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=50});
+    // chassis.turnToHeading(180, 1000);
+    // chassis.moveToPose(-14.000, -200.000, 180.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=127});
     
     }
 }
