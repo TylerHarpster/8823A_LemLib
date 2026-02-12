@@ -193,9 +193,6 @@ void autonomous() {
 
     chassis.setPose(0, 0, 0);
 
-    // chassis.turnToHeading(90, 9000);
-    // chassis.moveToPose(0, 24, 0, 9000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=20});
-
     std::printf("gurt\n");
 
 
@@ -381,9 +378,9 @@ void autonomous() {
     // chassis.turnToHeading(180, 1000);
 
     tonguePiston.set_value(true);
-    chassis.moveToPose(34.900, -29.750, 180.000, 9000, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(34.900, -28.000, 180.000, 750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=40});
-    chassis.moveToPose(34.900, -29.500, 180.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
+    chassis.moveToPose(34.900, -30.750, 180.000, 9000, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(34.900, -29.000, 180.000, 750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=40});
+    chassis.moveToPose(34.900, -30.500, 180.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
     pros::delay(2000);
     LeftIntake.move_velocity(0);
     RightIntake.move_velocity(0);
