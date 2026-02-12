@@ -153,12 +153,11 @@ void lemlib::Chassis::moveToPose(float x, float y, float theta, int timeout, Mov
         pros::delay(10);
     }
     if(timer.isDone()){
-        std::printf("early exit \n");
+        std::printf("early exit");
     }
     else{
-        std::printf("normal exit, %i ms \n",timer.getTimePassed());
+        std::printf("normal exit, %i ms",timer.getTimePassed());
     }
-    // std::printf("ended moveToPose at (x %.2f   y %.2f   t %.2f)\n",this->getPose().x,this->getPose().y,this->getPose().theta); 
     // stop the drivetrain
     drivetrain.leftMotors->move(0);
     drivetrain.rightMotors->move(0);
