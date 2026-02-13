@@ -194,24 +194,31 @@ void autonomous() {
     chassis.setPose(0, 0, 0);
 
     std::printf("gurt\n");
-
+    pros::Task autoStop([](){
+        pros::delay(15000);
+        while(1){
+            chassis.cancelAllMotions();
+            pros::delay(100);
+        }
+    });
 
     // SIGNATURE WIN POINT
-    if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(2))->getState()){
+    // if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(2))->getState()){
+    if(1){
         
     // Moves to collect the cluster of three blocks
     retainerPiston.set_value(true);
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
-    chassis.moveToPose(18.000, 25.490, 42.850, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=40});
+    chassis.moveToPose(18.000, 25.490, 42.850, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=55});
     pros::delay(500);
 
     // Move to align with long goal and score cluster
-    chassis.moveToPose(43.500, -2.500, 110.377, 1750, {.forwards=true,.maxSpeed=127,.minSpeed=45});
-    chassis.turnToHeading(180.138, 1500);
-    chassis.moveToPose(37.500, 16.000, 180.000, 1000, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=45});
+    chassis.moveToPose(45.500, -2.500, 110.377, 1750, {.forwards=true,.maxSpeed=127,.minSpeed=50});
+    chassis.turnToHeading(180, 1500);
+    chassis.moveToPose(39.500, 16.000, 180.000, 1000, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=75});
     retainerPiston.set_value(false);
-    pros::delay(1500);
+    pros::delay(1000);
     LeftIntake.move_velocity(-300);
     RightIntake.move_velocity(-300);
     pros::delay(250);
@@ -223,19 +230,20 @@ void autonomous() {
     retainerPiston.set_value(true);
 
     // Move forward and turn to face next block cluster
-    chassis.moveToPose(39.500, 2.490, 180.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
-    chassis.moveToPose(12.463, 22.490, -45.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(39.500, 2.490, 180.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=75});
+    chassis.moveToPose(12.463, 22.490, -45.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=75});
     LeftIntake.move_velocity(100);
     RightIntake.move_velocity(100);
 
     // Collect other cluster and score in High Middle Goal
-    chassis.moveToPose(-46.878, 22.685, -90.452, 4000, {.forwards=true,.lead=0.1,.maxSpeed=127,.minSpeed=37});
+    chassis.moveToPose(-46.878, 22.685, -90.452, 4000, {.forwards=true,.lead=0.1,.maxSpeed=127,.minSpeed=75});
     chassis.turnToHeading(-131.138, 1500);
-    chassis.moveToPose(-26.500, 32.000, -131.138, 1750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=40});
+    chassis.moveToPose(-26.500, 32.000, -131.138, 1750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=75});
     LeftIntake.move_velocity(-300);
     RightIntake.move_velocity(-300);
     pros::delay(300);
     middlePiston.set_value(true);
+    retainerPiston.set_value(false);
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
     pros::delay(2500);
@@ -244,18 +252,18 @@ void autonomous() {
     LeftIntake.move_velocity(0);
     RightIntake.move_velocity(0);
     middlePiston.set_value(false);
-    chassis.moveToPose(-65.285, 1.045, -131.138, 3000, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=35});
+    chassis.moveToPose(-65.285, 1.045, -131.138, 3000, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=75});
     chassis.turnToHeading(-172.032, 2000);
     tonguePiston.set_value(true);
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
-    chassis.moveToPose(-64.071, -28.750, -171.281, 3000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(-64.071, -28.750, -171.281, 3000, {.forwards=true,.maxSpeed=127,.minSpeed=75});
 
     // Score blocks from loader into long goal
     pros::delay(1500);
     LeftIntake.move_velocity(0);
     RightIntake.move_velocity(0);
-    chassis.moveToPose(-59.500, 15.904, -173.217, 3000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(-59.500, 15.904, -173.217, 3000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=75});
     retainerPiston.set_value(false);
     tonguePiston.set_value(false);
     LeftIntake.move_velocity(600);
