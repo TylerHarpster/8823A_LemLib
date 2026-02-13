@@ -110,6 +110,26 @@ namespace touchscreen{
                         }
         
                     ),
+                    new button(
+                        280,
+                        10,
+                        200,
+                        50,
+                        [](button* self){
+                            self->setStrokeWeight(5);
+                            self->setState(1);
+                        },
+                        [](button* self){
+                            self->setStrokeWeight(0);
+                            self->setState(0);
+                        },
+                        {
+                            .strokeWeight=0,
+                            .text="Skills",
+                            .fillColor=0x00001ff0
+                        }
+        
+                    ),
                 });
 
         
