@@ -3,6 +3,7 @@
 #include "api.h"
 // #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/misc.hpp"
 #include "pros/rtos.hpp"
 #include "pros/screen.h"
 #include "pros/screen.hpp"
@@ -194,86 +195,68 @@ void autonomous() {
     chassis.setPose(0, 0, 0);
 
     std::printf("gurt\n");
-    pros::Task autoStop([](){
-        pros::delay(15000);
-        while(1){
-            chassis.cancelAllMotions();
-            pros::delay(100);
-        }
-    });
+    // pros::Task autoStop([](){
+    //     pros::delay(15000);
+    //     if(pros::competition::is_competition_switch()){
+    //         while(1){
+    //             chassis.cancelAllMotions();
+    //             pros::delay(100);
+    //         }
+    //     }
+    // });
 
     // SIGNATURE WIN POINT
-    // if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(2))->getState()){
-    if(1){
-        
-    // Moves to collect the cluster of three blocks
-    retainerPiston.set_value(true);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    chassis.moveToPose(18.000, 25.490, 42.850, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=55});
-    pros::delay(500);
+    if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(2))->getState()){
+    // if(1){
 
-    // Move to align with long goal and score cluster
-    chassis.moveToPose(45.500, -2.500, 110.377, 1750, {.forwards=true,.maxSpeed=127,.minSpeed=50});
-    chassis.turnToHeading(180, 1500);
-    chassis.moveToPose(39.500, 16.000, 180.000, 1000, {.forwards=false,.lead=0.2,.maxSpeed=127,.minSpeed=75});
-    retainerPiston.set_value(false);
-    pros::delay(1000);
-    LeftIntake.move_velocity(-300);
-    RightIntake.move_velocity(-300);
-    pros::delay(250);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    pros::delay(750);
-    LeftIntake.move_velocity(0);
-    RightIntake.move_velocity(0);
-    retainerPiston.set_value(true);
+        //go to loader
+        LeftIntake.move(127);
+        RightIntake.move(127);
+        chassis.moveToPose(0, 37, 0,2000,{.maxSpeed=127,.minSpeed=50});
+        tonguePiston.set_value(true);
+        chassis.turnToHeading(-90, 1600);
+        chassis.moveToPoint(-16.5, 31, 2000,{ .maxSpeed=127,.minSpeed=50});
+        pros::delay(1200);
 
-    // Move forward and turn to face next block cluster
-    chassis.moveToPose(39.500, 2.490, 180.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=75});
-    chassis.moveToPose(12.463, 22.490, -45.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=75});
-    LeftIntake.move_velocity(100);
-    RightIntake.move_velocity(100);
+        //go yto long gola
+        chassis.moveToPoint(14, 32, 2000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
+        pros::delay(1000);
+        retainerPiston.set_value(false);
+        LeftIntake.move_velocity(600);
+        RightIntake.move_velocity(600);
+        pros::delay(1000);
+        LeftIntake.move_velocity(-300);
+        RightIntake.move_velocity(-300);
+        pros::delay(250);
+        LeftIntake.move_velocity(600);
+        RightIntake.move_velocity(600);
+        pros::delay(1000);
 
-    // Collect other cluster and score in High Middle Goal
-    chassis.moveToPose(-46.878, 22.685, -90.452, 4000, {.forwards=true,.lead=0.1,.maxSpeed=127,.minSpeed=75});
-    chassis.turnToHeading(-131.138, 1500);
-    chassis.moveToPose(-26.500, 32.000, -131.138, 1750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=75});
-    LeftIntake.move_velocity(-300);
-    RightIntake.move_velocity(-300);
-    pros::delay(300);
-    middlePiston.set_value(true);
-    retainerPiston.set_value(false);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    pros::delay(2500);
-
-    // Move towards loader and collect alliance's colored blocks
-    LeftIntake.move_velocity(0);
-    RightIntake.move_velocity(0);
-    middlePiston.set_value(false);
-    chassis.moveToPose(-65.285, 1.045, -131.138, 3000, {.forwards=true,.lead=0,.maxSpeed=50,.minSpeed=75});
-    chassis.turnToHeading(-172.032, 2000);
-    tonguePiston.set_value(true);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    chassis.moveToPose(-64.071, -28.750, -171.281, 3000, {.forwards=true,.maxSpeed=127,.minSpeed=75});
-
-    // Score blocks from loader into long goal
-    pros::delay(1500);
-    LeftIntake.move_velocity(0);
-    RightIntake.move_velocity(0);
-    chassis.moveToPose(-59.500, 15.904, -173.217, 3000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=75});
-    retainerPiston.set_value(false);
-    tonguePiston.set_value(false);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
-    pros::delay(1500);
-    LeftIntake.move_velocity(-300);
-    RightIntake.move_velocity(-300);
-    pros::delay(250);
-    LeftIntake.move_velocity(600);
-    RightIntake.move_velocity(600);
+        //collcet blocks abn go to middle
+        wingPiston.set_value(true);
+        tonguePiston.set_value(false);
+        retainerPiston.set_value(true);
+        chassis.moveToPoint(0, 31, 2000,{.forwards=true,.maxSpeed=127,.minSpeed=50});
+        chassis.turnToPoint(27, 5,2000,{.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(27, 5,2000,{.maxSpeed=127,.minSpeed=50});
+        chassis.turnToHeading(-45, 2000);
+        chassis.moveToPoint(27+3, 5-3,2000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
+        middlePiston.set_value(true);
+        pros::delay(1000);
+        LeftIntake.move_velocity(-300);
+        RightIntake.move_velocity(-300);
+        pros::delay(250);
+        LeftIntake.move_velocity(600);
+        RightIntake.move_velocity(600);
+        pros::delay(1000);
+        chassis.moveToPoint(27, 5,2000,{.maxSpeed=127,.minSpeed=50});
+        // chassis.moveToPose(33.092670, 8.0418580, -229.84500,2000,{.maxSpeed=127,.minSpeed=50});
+        // chassis.moveToPose(38.939789, 3.7359330, -46.993523,2000,{.maxSpeed=127,.minSpeed=50});
+        // chassis.moveToPose(36.759243, -11.66561, -187.67282,2000,{.maxSpeed=127,.minSpeed=50});
+        // chassis.moveToPose(44.177277, -51.09176, -188.34074,2000,{.maxSpeed=127,.minSpeed=50});
+        // chassis.moveToPose(19.321138, -76.44823, -138.86180,2000,{.maxSpeed=127,.minSpeed=50});
+        // chassis.moveToPose(34.785660, -70.40437, -104.48307,2000,{.maxSpeed=127,.minSpeed=50});
+        // chassis.moveToPose(25.481079, -26.63905, -18.461731,2000,{.maxSpeed=127,.minSpeed=50});
     }
 
 
