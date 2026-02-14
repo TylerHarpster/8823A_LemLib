@@ -347,25 +347,31 @@ void autonomous() {
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
     chassis.moveToPose(22.463, 28.490, 54.850, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
-    tonguePiston.set_value(true);
+    // tonguePiston.set_value(true);
     pros::delay(750);
 
     // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
-    tonguePiston.set_value(false);
-    chassis.moveToPose(37.247, -8.750, 131.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
+    // tonguePiston.set_value(false);
+    chassis.moveToPose(37.547, -8.750, 131.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
     tonguePiston.set_value(true);
     chassis.turnToHeading(180.000, 1500);
     pros::delay(500);
 
     // Moves into the loader to unload and store the alliance's three colored blocks
-    chassis.moveToPose(34.750, -24.200, 179.504, 1250, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=50});
+    chassis.moveToPoint(37.250, -24.100, 1250, {.forwards=true,.maxSpeed=127,.minSpeed=50});
     // chassis.moveToPose(35.229, -23.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
     // chassis.moveToPose(35.229, -24.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
     pros::delay(450);
 
     // Moves to long goal to score the three blocks from the loader
-    chassis.moveToPose(35.500, 7.955, 180.504, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=50});
+    // LeftIntake.move_velocity(-400);
+    // RightIntake.move_velocity(-400);
+    // pros::delay(100);
+    // LeftIntake.move_velocity(600);
+    // RightIntake.move_velocity(600);
+    chassis.moveToPoint(37.900, 10.000, 2000, {.forwards=false,.maxSpeed=127,.minSpeed=50});
     // tonguePiston.set_value(false);
+    pros::delay(1000);
     retainerPiston.set_value(false);
     pros::delay(1000);
     LeftIntake.move_velocity(-400);
@@ -373,8 +379,13 @@ void autonomous() {
     pros::delay(250);
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
-    pros::delay(2500);
-
+    pros::delay(1500);
+    LeftIntake.move_velocity(-400);
+    RightIntake.move_velocity(-400);
+    pros::delay(250);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    pros::delay(1500);
     // // Lines up the wing and gets control zone in long goal
     // chassis.moveToPose(35.229, -13.900, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=50});
     // chassis.moveToPose(24.325, 14.377, 168.279, 9000, {.forwards=false,.maxSpeed=127,.minSpeed=20});
@@ -530,7 +541,8 @@ void autonomous() {
     }
 
     else{
-
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
     }
 }
 
