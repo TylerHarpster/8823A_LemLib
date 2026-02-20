@@ -24,7 +24,7 @@ int retainerState=0; // variable for retainer
 pros::Controller controller(pros::E_CONTROLLER_MASTER); // defines the controller
 
 pros::MotorGroup leftMotors({1, -6, 4}); // left motors on ports 13, 12, 11
-pros::MotorGroup rightMotors({-9, 10, -21}); // right motors on ports 20, 19, 18
+pros::MotorGroup rightMotors({-16, 10, -21}); // right motors on ports 20, 19, 18
 
 pros::Motor LeftIntake(5);
 pros::Motor RightIntake(-20);
@@ -414,27 +414,27 @@ void autonomous() {
     retainerPiston.set_value(true);
     chassis.moveToPoint(0, 6, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
     // chassis.turnToHeading(90, 1500);
-    chassis.moveToPose(35.300, -8.000, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=40});
+    chassis.moveToPose(35.600, -8.000, 180.000, 5000, {.forwards=true,.maxSpeed=127,.minSpeed=40});
     // chassis.turnToHeading(180, 1000);
 
     tonguePiston.set_value(true);
-    chassis.moveToPose(35.100, -22.500, 180.000, 2250, {.forwards=true,.lead=0.1,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(35.750, -24.000, 180.000, 3500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     // chassis.moveToPose(34.900, -29.000, 180.000, 750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=40});
     // chassis.moveToPose(34.900, -30.500, 180.000, 1000, {.forwards=true,.lead=0.2,.maxSpeed=127,.minSpeed=40});
     pros::delay(2000);
     LeftIntake.move_velocity(0);
     RightIntake.move_velocity(0);
-    chassis.moveToPose(35.300, -15.000, 180.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(35.300, -10.000, 180.000, 2000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     tonguePiston.set_value(false);
 
     chassis.turnToHeading(-90, 1000);
-    chassis.moveToPose(24.600, -13.250, -90.000, 750, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(24.600, -10.000, -90.000, 750, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     chassis.moveToPose(24.000, 30.731, 2.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
     chassis.moveToPose(24.000, 74.731, 2.000, 3000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
     chassis.turnToHeading(45, 1000);
 
     chassis.moveToPose(44.000, 90.731, 0.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
-    chassis.moveToPose(37.200, 72.000, 0.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(38.000, 72.000, 0.000, 1500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     tonguePiston.set_value(true);
     retainerPiston.set_value(false);
     LeftIntake.move_velocity(600);
@@ -448,9 +448,9 @@ void autonomous() {
     pros::delay(3500);
     retainerPiston.set_value(true);
 
-    chassis.moveToPose(37.000, 111.750, 0.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(38.600, 112.150, 2.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     pros::delay(2000);
-    chassis.moveToPose(37.000, 71.500, 3.000, 2500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
+    chassis.moveToPose(38.000, 71.800, 0.000, 2500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
     retainerPiston.set_value(false);
     pros::delay(1000);
     LeftIntake.move_velocity(-300);
@@ -537,7 +537,7 @@ void autonomous() {
     RightIntake.move_velocity(600);
     chassis.moveToPose(-15.000, 6.000, -90.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=50});
     chassis.turnToHeading(180, 1000);
-    chassis.moveToPose(-15.000, -200.000, 180.000, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=127});
+    chassis.moveToPose(-15.000, -200.000, 180.000, 1900, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=127});
     
     }
 
