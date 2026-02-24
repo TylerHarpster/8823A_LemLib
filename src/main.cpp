@@ -208,10 +208,36 @@ void autonomous() {
 
     // });
 
-    // SIGNATURE WIN POINT
+    // SIGNATURE    WIN POINT
     if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(2))->getState()){
     // if(1){
 
+    //NEW WP
+        //go to loader
+        float loader_y=34;
+        chassis.moveToPoint(0.000 ,loader_y, 5000,{.minSpeed=60});
+        chassis.turnToHeading(90, 1000);
+        chassis.moveToPoint(12 ,loader_y, 5000,{.minSpeed=60});
+        //long goal
+        chassis.moveToPoint(-16 ,loader_y, 5000,{.forwards=false,.minSpeed=60});
+        //right cluster
+        chassis.moveToPose(-2 ,24.31, 154.5,5000,{.minSpeed=60});
+        chassis.moveToPose(-36 ,2, 236.1,5000,{.minSpeed=60});
+        //left cluster
+        chassis.moveToPose(-24.0 ,-17.4, 179.8,5000,{.minSpeed=60});
+        chassis.moveToPose(-36.0 ,-41.4, 179.8,5000,{.minSpeed=60});
+        // chassis.moveToPose(-28.0 ,-33.1, 149.8,5000,{.minSpeed=30});
+        
+        chassis.moveToPose(-48.0 ,-17.4, 135.8,5000,{.forwards=false,.minSpeed=60});
+        // chassis.moveToPose(-24.7 ,-41.2, 171.3,5000,{.minSpeed=30});
+        // chassis.moveToPose(-22.1 ,-40.2, 144.6,5000,{.minSpeed=30});
+        // chassis.moveToPose(5.365 ,-85.7, 146.5,5000,{.minSpeed=30});
+        // chassis.moveToPose(-8.67 ,-75.3, 103.8,5000,{.minSpeed=30});
+        // chassis.moveToPose(-17.4 ,-73.1, 104.9,5000,{.minSpeed=30});
+
+
+    //OLD  SIG WP
+/*
         //go to loader
         LeftIntake.move(127);
         RightIntake.move(127);
@@ -285,6 +311,8 @@ void autonomous() {
         // chassis.moveToPose(44.177277, -51.09176, -188.34074,2000,{.maxSpeed=127,.minSpeed=50});
         // chassis.moveToPose(34.785660, -70.40437, -104.48307,2000,{.maxSpeed=127,.minSpeed=50});
         // chassis.moveToPose(25.481079, -26.63905, -18.461731,2000,{.maxSpeed=127,.minSpeed=50});
+
+*/
     }
 
 
