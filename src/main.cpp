@@ -308,6 +308,7 @@ void autonomous() {
     pros::delay(150);
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
+    
     }
 
     // NEW RIGHT SIDE
