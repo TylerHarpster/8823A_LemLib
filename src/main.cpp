@@ -67,7 +67,7 @@ lemlib::ControllerSettings linearcontroller(0.2, // proportional gain (kP)
                                             100, // small error range timeout, in milliseconds
                                             2, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
-                                            0 // maximum acceleration (slew)
+                                            10 // maximum acceleration (slew)
 );
 
 // angular motion controller
@@ -215,21 +215,24 @@ void autonomous() {
     //NEW WP
         //go to loader
         float loader_y=31.8;
-
+        chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    chassis.setPose(0, 0, 0);
         retainerPiston.set_value(true);
         LeftIntake.move_velocity(500);
         RightIntake.move_velocity(500);
-        chassis.moveToPoint(0.000 , loader_y, 5000,{.minSpeed=55});
+        chassis.moveToPoint(0.000 , loader_y, 5000,{.minSpeed=60});
         chassis.turnToHeading(90, 750);
         tonguePiston.set_value(true);
-        chassis.moveToPoint(17.5 , loader_y, 1300,{.minSpeed=55});
-        pros::delay(950);
+        chassis.moveToPoint(17.5 , loader_y, 1300,{.minSpeed=60});
+        chassis.moveToPoint(18 , loader_y, 1000,{.minSpeed=60});
+        pros::delay(200);
         //long goal
-        chassis.moveToPoint(-11 , loader_y, 5000,{.forwards=false,.minSpeed=65});
+        chassis.moveToPoint(-10 , loader_y, 5000,{.forwards=false,.minSpeed=65});
         pros::delay(750);
         retainerPiston.set_value(false);
         LeftIntake.move_velocity(600);
         RightIntake.move_velocity(600);
+
         pros::delay(1300);
         tonguePiston.set_value(false);
         retainerPiston.set_value(true);
@@ -245,10 +248,11 @@ void autonomous() {
         chassis.moveToPoint(-24.6 , -41.4, 5000,{.minSpeed=65});
         // chassis.moveToPose(-28.0 ,-33.1, 149.8,5000,{.minSpeed=30});
         //high middle goal
+        pros::delay(1);
         chassis.turnToHeading(135, 750);
-        chassis.moveToPoint(-34 , -31, 2000,{.forwards=false,.minSpeed=65});
-        pros::delay(400);
         tonguePiston.set_value(true);
+        chassis.moveToPoint(-32 , -33, 2000,{.forwards=false,.minSpeed=65});
+        pros::delay(400);
         LeftIntake.move_velocity(-380);
         RightIntake.move_velocity(-380);
         middlePiston.set_value(true);
@@ -260,14 +264,14 @@ void autonomous() {
         middlePiston.set_value(false);
         LeftIntake.move_velocity(0);
         RightIntake.move_velocity(0);
-        chassis.moveToPoint(0 , -63.7, 5000,{.minSpeed=65});
+        chassis.moveToPoint(0 , -63.1, 5000,{.minSpeed=65});
         chassis.turnToHeading(90, 800,{.minSpeed=50});
         // LeftIntake.move_velocity(600);
         // RightIntake.move_velocity(600);
         // chassis.moveToPoint(17, -63.4, 1500,{.minSpeed=60});
         // pros::delay(600);
         //2nd long goal
-        chassis.moveToPoint(-11 , -63, 5000,{.forwards=false,.minSpeed=70});
+        chassis.moveToPoint(-11 , -61, 5000,{.forwards=false,.minSpeed=70});
         pros::delay(500);
         retainerPiston.set_value(false);
         LeftIntake.move_velocity(600);
