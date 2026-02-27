@@ -192,7 +192,7 @@ void autonomous() {
 
     pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
 
-    chassis.setPose(0, 0, 0);
+    chassis.setPose(0, 1.16, 0);
 
     std::printf("gurt\n");
     // pros::Task autoStop([](){
