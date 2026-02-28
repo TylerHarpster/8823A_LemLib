@@ -301,7 +301,7 @@ void autonomous() {
         pros::delay(1200);
 
         //go to long goal
-        chassis.moveToPoint(9, 28.25, 4000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(9, 28.59, 4000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
         LeftIntake.move_velocity(600);
         RightIntake.move_velocity(600);
         pros::delay(1000);
@@ -326,7 +326,7 @@ void autonomous() {
 
         //go to middle
         chassis.turnToHeading(-55, 1000);
-        chassis.moveToPoint(34, -6.25,4000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(33.57, -6.49,4000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
         pros::delay(300);
         // tonguePiston.set_value(true);
         LeftIntake.move_velocity(-300);
@@ -336,7 +336,7 @@ void autonomous() {
         // retainerPiston.set_value(false);
         LeftIntake.move_velocity(600);
         RightIntake.move_velocity(600);
-        pros::delay(1750);
+        pros::delay(1760);
         middlePiston.set_value(false);
         tonguePiston.set_value(false);
         // retainerPiston.set_value(true);
@@ -354,8 +354,8 @@ void autonomous() {
         chassis.moveToPoint(46.2, -28.2, 3000, {.maxSpeed=127,.minSpeed=50});
         pros::delay(1000);
         tonguePiston.set_value(true);
-        LeftIntake.move_velocity(-30);
-        RightIntake.move_velocity(-30);
+        LeftIntake.move_velocity(-40);
+        RightIntake.move_velocity(-40);
         
         // chassis.moveToPoint(27, 5,2000,{.maxSpeed=127,.minSpeed=67});
         // chassis.turnToHeading(-180, 1000,{.minSpeed=50});
