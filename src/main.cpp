@@ -218,7 +218,7 @@ void autonomous() {
         chassis.moveToPoint(-16.5, 31, 2000,{ .maxSpeed=127,.minSpeed=50});
         pros::delay(1200);
 
-        //go yto long gola
+        //go to long goal
         chassis.moveToPoint(14, 32, 2000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
         pros::delay(1000);
         retainerPiston.set_value(false);
