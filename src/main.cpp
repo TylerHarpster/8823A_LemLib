@@ -1,17 +1,22 @@
 #include "main.h"
+#include "fmt/format.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "api.h"
 // #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/misc.h"
 #include "pros/misc.hpp"
 #include "pros/rtos.hpp"
 #include "pros/screen.h"
 #include "pros/screen.hpp"
 #include <cstdio>
+#include <fstream>
+#include <iomanip>
 #include <variant>
 // #include "pros/screen.h"
 // #include "pros/screen.hpp"
 // controller
+#include <iostream>
 
 
 
@@ -189,50 +194,72 @@ void ram(float speed){
 // };
 // autonRoute selectedAuton=skills;
 void autonomous() {
+    // std::ifstream inFile;
+    // inFile.open("auto-runs.txt");
+    // int runNumber=inFile.get();
+    // printf("run #%i\n",runNumber);
+    // inFile.close();
+    
+    // outFile.open("auto-runs.txt");
+    // outFile << runNumber+1;
+    // outFile.close();
+    bool isDone=false;
+    pros::Task adsjfdsjf([&isDone](){
+        std::ofstream outFile;
+        lemlib::Pose oldPose(0,0,0);
+        std::string fileName="route"+fmt::to_string(56)+".txt";
+        std:: cout <<fileName;
+        outFile.open(fileName);
+        while(!isDone){
+            printf("22\n");
+            outFile << std::setprecision(2) << chassis.getPose().x << ", " << chassis.getPose().y << ", " << chassis.getPose().theta << ", " << chassis.getPose().distance(oldPose) << "\n"; 
+            
+            oldPose=chassis.getPose();
+            pros::delay(50);
+        }
+        printf("gjhghghg\n");
+        outFile.close();
+        });
 
-    pros::Task adsjfdsjf([](){while(1){std::printf("x %.2f   y %.2f   t %.2f\n",chassis.getPose().x,chassis.getPose().y,chassis.getPose().theta); pros::delay(100);}});
-
-    chassis.setPose(0, 1.16, 0);
-
-    std::printf("gurt\n");
-    // pros::Task autoStop([](){
+        chassis.setPose(0, 1.16, 0);
+        
+        std::printf("gurt\n");
+        // pros::Task autoStop([](){
     //     pros::delay(15000);
     //     if(pros::competition::is_competition_switch()){
-    //         while(1){
+        //         while(1){
     //             chassis.cancelAllMotions();
     //             pros::delay(100);
     //         }
     //     }
     // });
     // pros::Task autoVibrate([](){
-
+        
     // });
-
+    
     // SIGNATURE    WIN POINT
     if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(2))->getState()){
-    // if(1){
+        // if(1){
+            
+        //NEW WP
+        chassis.setPose(0,0, 0);
+       //go to loader
+        float loader_y=30;
 
-    //NEW WP
-        //go to loader
-        float loader_y=31.8;
-        chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    chassis.setPose(0, 0, 0);
         retainerPiston.set_value(true);
         LeftIntake.move_velocity(500);
         RightIntake.move_velocity(500);
-        chassis.moveToPoint(0.000 , loader_y, 5000,{.minSpeed=60});
+        chassis.moveToPoint(0.000 , 30, 5000,{.minSpeed=55});
         chassis.turnToHeading(90, 750);
         tonguePiston.set_value(true);
-        chassis.moveToPoint(17.5 , loader_y, 1300,{.minSpeed=60});
-        chassis.moveToPoint(18 , loader_y, 1000,{.minSpeed=60});
-        pros::delay(200);
+        chassis.moveToPose(17.5 , chassis.getPose().y,90, 1300,{.minSpeed=55});
+        pros::delay(950);
         //long goal
-        chassis.moveToPoint(-10 , loader_y, 5000,{.forwards=false,.minSpeed=65});
+        chassis.moveToPoint(-9 , chassis.getPose().y, 5000,{.forwards=false,.minSpeed=65});
         pros::delay(750);
         retainerPiston.set_value(false);
         LeftIntake.move_velocity(600);
         RightIntake.move_velocity(600);
-
         pros::delay(1300);
         tonguePiston.set_value(false);
         retainerPiston.set_value(true);
@@ -248,11 +275,10 @@ void autonomous() {
         chassis.moveToPoint(-24.6 , -41.4, 5000,{.minSpeed=65});
         // chassis.moveToPose(-28.0 ,-33.1, 149.8,5000,{.minSpeed=30});
         //high middle goal
-        pros::delay(1);
         chassis.turnToHeading(135, 750);
-        tonguePiston.set_value(true);
-        chassis.moveToPoint(-32 , -33, 2000,{.forwards=false,.minSpeed=65});
+        chassis.moveToPoint(-43, -40, 2000,{.forwards=false,.minSpeed=65});
         pros::delay(400);
+        tonguePiston.set_value(true);
         LeftIntake.move_velocity(-380);
         RightIntake.move_velocity(-380);
         middlePiston.set_value(true);
@@ -264,18 +290,19 @@ void autonomous() {
         middlePiston.set_value(false);
         LeftIntake.move_velocity(0);
         RightIntake.move_velocity(0);
-        chassis.moveToPoint(0 , -63.1, 5000,{.minSpeed=65});
+        chassis.moveToPoint(0 , -63.7, 5000,{.minSpeed=65});
         chassis.turnToHeading(90, 800,{.minSpeed=50});
         // LeftIntake.move_velocity(600);
         // RightIntake.move_velocity(600);
         // chassis.moveToPoint(17, -63.4, 1500,{.minSpeed=60});
         // pros::delay(600);
         //2nd long goal
-        chassis.moveToPoint(-11 , -61, 5000,{.forwards=false,.minSpeed=70});
+        chassis.moveToPoint(-11 , -63, 5000,{.forwards=false,.minSpeed=70});
         pros::delay(500);
         retainerPiston.set_value(false);
         LeftIntake.move_velocity(600);
         RightIntake.move_velocity(600);
+
 
 
         // chassis.moveToPose(-24.7 ,-41.2, 171.3,5000,{.minSpeed=30});
@@ -625,7 +652,9 @@ void autonomous() {
     else{
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
+    pros::delay(1500);
     }
+    isDone=true;
 }
 
 /**
