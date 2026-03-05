@@ -194,30 +194,30 @@ void ram(float speed){
 // };
 // autonRoute selectedAuton=skills;
 void autonomous() {
-    // std::ifstream inFile;
-    // inFile.open("auto-runs.txt");
-    // int runNumber=inFile.get();
-    // printf("run #%i\n",runNumber);
-    // inFile.close();
-    
-    // outFile.open("auto-runs.txt");
-    // outFile << runNumber+1;
-    // outFile.close();
+    std::ifstream inFile;
+    inFile.open("auto-runs.txt");
+    int runNumber=inFile.get();
+    printf("run #%i\n",runNumber);
+    inFile.close();
+    pros::delay(1000);
+    std::ofstream outFile2;
+    outFile2.open("auto-runs.txt");
+    outFile2 << runNumber+1;
+    outFile2.close();
     bool isDone=false;
-    pros::Task adsjfdsjf([&isDone](){
+    pros::Task adsjfdsjf([&runNumber, &isDone](){
         std::ofstream outFile;
         lemlib::Pose oldPose(0,0,0);
-        std::string fileName="route"+fmt::to_string(56)+".txt";
+        std::string fileName="route"+fmt::to_string(runNumber)+".txt";
         std:: cout <<fileName;
         outFile.open(fileName);
+        outFile << std::fixed << std::setprecision(2);
         while(!isDone){
-            printf("22\n");
-            outFile << std::setprecision(2) << chassis.getPose().x << ", " << chassis.getPose().y << ", " << chassis.getPose().theta << ", " << chassis.getPose().distance(oldPose) << "\n"; 
+            outFile << chassis.getPose().x << ", " << chassis.getPose().y << ", " << chassis.getPose().theta << ", " << chassis.getPose().distance(oldPose) << "\n"; 
             
             oldPose=chassis.getPose();
             pros::delay(50);
         }
-        printf("gjhghghg\n");
         outFile.close();
         });
 
@@ -324,66 +324,73 @@ void autonomous() {
         //go to loader
         LeftIntake.move_velocity(600);
         RightIntake.move_velocity(600);
-        chassis.moveToPoint(0, 35, 4000,{.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(0, 35, 4000,{.maxSpeed=127,.minSpeed=45});
         tonguePiston.set_value(true);
         chassis.turnToHeading(-90, 1000);
-        chassis.moveToPoint(-20.75, 30, 4000,{.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(-21.25, 28.75, 4000,{.maxSpeed=127,.minSpeed=50});
         pros::delay(1200);
 
         //go to long goal
-        chassis.moveToPoint(9, 28.59, 4000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(7.5, 28.5, 4000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
         LeftIntake.move_velocity(600);
         RightIntake.move_velocity(600);
-        pros::delay(1000);
-        // LeftIntake.move_velocity(-300);
-        // RightIntake.move_velocity(-300);
-        // pros::delay(250);
+        pros::delay(500);
+        LeftIntake.move_velocity(-300);
+        RightIntake.move_velocity(-300);
+        pros::delay(250);
         retainerPiston.set_value(false);
-        // LeftIntake.move_velocity(600);
-        // RightIntake.move_velocity(600);
+        LeftIntake.move_velocity(600);
+        RightIntake.move_velocity(600);
         pros::delay(1500);
 
-        //collect cluster
+        //collect 1st cluster
         wingPiston.set_value(true);
         tonguePiston.set_value(false);
         retainerPiston.set_value(true);
-        chassis.moveToPoint(-2, 29, 4000,{.forwards=true,.maxSpeed=127,.minSpeed=50});
-        chassis.turnToPoint(29, -3.75,1000,{.maxSpeed=127});
-        chassis.moveToPoint(29, -3.75,2000,{.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(-2, 28.25, 4000,{.forwards=true,.maxSpeed=127,.minSpeed=50});
+        chassis.turnToPoint(27, 1.25,1000,{.maxSpeed=127});
+        chassis.moveToPoint(27, 1.25,2000,{.maxSpeed=127,.minSpeed=50});
         pros::delay(850);
         tonguePiston.set_value(true);
         pros::delay(750);
 
         //go to middle
-        chassis.turnToHeading(-55, 1000);
-        chassis.moveToPoint(33.57, -6.49,4000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
-        pros::delay(300);
+        chassis.turnToHeading(-55, 2000, {.maxSpeed=55});
+        chassis.moveToPoint(30.35, -4,4000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
+        pros::delay(400);
         // tonguePiston.set_value(true);
-        LeftIntake.move_velocity(-300);
-        RightIntake.move_velocity(-300);
-        pros::delay(450);
+        LeftIntake.move_velocity(-250);
+        RightIntake.move_velocity(-250);
+        pros::delay(550);
         middlePiston.set_value(true);
-        // retainerPiston.set_value(false);
         LeftIntake.move_velocity(600);
         RightIntake.move_velocity(600);
+        // pros::delay(750);
+        // LeftIntake.move_velocity(-200);
+        // RightIntake.move_velocity(-200);
+        // pros::delay(550);
+        // middlePiston.set_value(true);
+        // LeftIntake.move_velocity(600);
+        // RightIntake.move_velocity(600);
+        // retainerPiston.set_value(false);
         pros::delay(1760);
         middlePiston.set_value(false);
         tonguePiston.set_value(false);
         // retainerPiston.set_value(true);
         
         //collect second cluster
-        chassis.moveToPoint(22, -2,4000,{.maxSpeed=127,.minSpeed=50});
-        chassis.turnToHeading(180, 1000);
-        chassis.moveToPoint(23, -52, 3000,{.maxSpeed=127,.minSpeed=50});
-        pros::delay(1000);
+        chassis.moveToPoint(26.75, 1,2000,{.maxSpeed=127,.minSpeed=50});
+        chassis.turnToHeading(-175, 1000);
+        chassis.moveToPoint(26.75, -52, 3250,{.maxSpeed=127,.minSpeed=50});
+        pros::delay(1250);
         tonguePiston.set_value(true);
 
         //low goal
         chassis.turnToHeading(45, 1000);
         tonguePiston.set_value(false);
-        chassis.moveToPoint(46.2, -28.2, 3000, {.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(43.25, -33.25, 3000, {.maxSpeed=127,.minSpeed=50});
         pros::delay(1000);
-        tonguePiston.set_value(true);
+        // tonguePiston.set_value(true);
         LeftIntake.move_velocity(-40);
         RightIntake.move_velocity(-40);
         
@@ -470,7 +477,7 @@ void autonomous() {
 
 
     // NEW RIGHT SIDE
-    else if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState()){
+    else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState()) || true){
     // Moves to collect the cluster of three blocks
     wingPiston.set_value(true);
     retainerPiston.set_value(true);
@@ -488,10 +495,10 @@ void autonomous() {
     pros::delay(500);
 
     // Moves into the loader to unload and store the alliance's three colored blocks
-    chassis.moveToPoint(36.750, -20.500, 1250, {.forwards=true,.maxSpeed=127,.minSpeed=50});
+    chassis.moveToPoint(36.750, -23.500, 1250, {.forwards=true,.maxSpeed=127,.minSpeed=50});
     // chassis.moveToPose(35.229, -23.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
     // chassis.moveToPose(35.229, -24.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
-    pros::delay(500);
+    pros::delay(1200);
 
     // Moves to long goal to score the three blocks from the loader
     // LeftIntake.move_velocity(-400);
@@ -501,7 +508,7 @@ void autonomous() {
     // RightIntake.move_velocity(600);
     chassis.moveToPoint(37.050, 10.000, 2000, {.forwards=false,.maxSpeed=127,.minSpeed=50});
     // tonguePiston.set_value(false);
-    pros::delay(1000);
+    pros::delay(500);
     retainerPiston.set_value(false);
     pros::delay(1000);
     LeftIntake.move_velocity(-400);
@@ -517,6 +524,16 @@ void autonomous() {
     RightIntake.move_velocity(600);
     pros::delay(1500);
     // // Lines up the wing and gets control zone in long goal
+
+    
+    chassis.moveToPoint(37, -2, 1000,{.minSpeed=30});
+    chassis.moveToPoint(8.5, 12,10000,{.forwards=false,.minSpeed=30});
+    // chassis.moveToPose(20.777630, 13.49215, 177.465729,10000,{.forwards=false,.minSpeed=30});
+    // chassis.moveToPose(20.315542, 24.59947, 176.855530,10000,{.forwards=false,.minSpeed=30});
+    // chassis.moveToPose(20.183004, 26.82297, 177.199905,10000,{.forwards=false,.minSpeed=30});
+    
+    
+    
     // chassis.moveToPose(35.229, -13.900, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=50});
     // chassis.moveToPose(24.325, 14.377, 168.279, 9000, {.forwards=false,.maxSpeed=127,.minSpeed=20});
     // chassis.moveToPose(22.000, 18.377, 168.279, 9000, {.forwards=false,.maxSpeed=127,.minSpeed=20});
@@ -692,7 +709,7 @@ int tankState=0;
 void opcontrol() {
 
     chassis.cancelAllMotions();
-    chassis.setPose(0,0,0);
+    // chassis.setPose(0,0,0);
     int i=0;
     while (true) {
         // get joystick positions

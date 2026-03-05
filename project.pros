@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Jacson and Asher gooning eachother",
+    "project_name": "ODOM :)",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -82,9 +82,9 @@
       }
     },
     "upload_options": {
-      "icon": "pros",
-      "slot": 2,
-      "description": "PLEASE WORK PLEASE"
+      "icon": "pizza",
+      "slot": 1,
+      "description": "My Project"
     },
     "use_early_access": false
   }
