@@ -527,7 +527,6 @@ void autonomous() {
 
     // NEW RIGHT SIDE
     else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState()) || true){
-    else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState()) || true){
     // Moves to collect the cluster of three blocks
     wingPiston.set_value(true);
     retainerPiston.set_value(true);
