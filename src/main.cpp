@@ -527,6 +527,7 @@ void autonomous() {
 
     // NEW RIGHT SIDE
     else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState()) || true){
+    else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState()) || true){
     // Moves to collect the cluster of three blocks
     wingPiston.set_value(true);
     retainerPiston.set_value(true);
@@ -561,6 +562,7 @@ void autonomous() {
     // RightIntake.move_velocity(600);
     chassis.moveToPoint(37, 10.000, 2000, {.forwards=false,.maxSpeed=127,.minSpeed=50});
     // tonguePiston.set_value(false);
+    pros::delay(500);
     pros::delay(500);
     retainerPiston.set_value(false);
     pros::delay(1000);
@@ -793,6 +795,7 @@ void opcontrol() {
 
 
     chassis.cancelAllMotions();
+    // chassis.setPose(0,0,0);
     // chassis.setPose(0,0,0);
     int i=0;
     while (true) {
