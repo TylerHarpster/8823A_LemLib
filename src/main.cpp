@@ -23,6 +23,12 @@
 
 
 
+
+
+
+
+
+
 int wingState=0; // variable for wing
 int tongueState=0; // variable for tongue
 int middleState=0; // variable for middle score
@@ -31,11 +37,19 @@ int retainerState=0; // variable for retainer
 
 
 
+
+
+
+
 pros::Controller controller(pros::E_CONTROLLER_MASTER); // defines the controller
+
+
 
 
 pros::MotorGroup leftMotors({1, -6, 4}); // left motors on ports 13, 12, 11
 pros::MotorGroup rightMotors({-16, 10, -21}); // right motors on ports 20, 19, 18
+
+
 
 
 pros::Motor LeftIntake(5);
@@ -46,8 +60,12 @@ pros::adi::DigitalOut middlePiston('A');
 pros::adi::DigitalOut retainerPiston('D');
 
 
+
+
 // create an imu (inertial) on port 15
 pros::Imu imu(3);
+
+
 
 
 // tracking wheels
@@ -64,6 +82,8 @@ lemlib::TrackingWheel right(&rightEnc, lemlib::Omniwheel::NEW_275, 5.25);
 lemlib::TrackingWheel left(&leftEnc, lemlib::Omniwheel::NEW_275, -5.25);
 
 
+
+
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               &rightMotors, // right motor group
@@ -72,6 +92,8 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               600, // drivetrain rpm is 360
                               2 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
+
+
 
 
 // lateral motion controller
@@ -87,6 +109,8 @@ lemlib::ControllerSettings linearcontroller(0.2, // proportional gain (kP)
 );
 
 
+
+
 // angular motion controller
 lemlib::ControllerSettings angularcontroller(0.95, // proportional gain (kP)
                                              0, // integral gain (kI)
@@ -100,6 +124,8 @@ lemlib::ControllerSettings angularcontroller(0.95, // proportional gain (kP)
 );
 
 
+
+
 // sensors for odometry
 lemlib::OdomSensors sensors(&right, // vertical tracking wheel
                             &left, // vertical tracking wheel 2, set to nullptr as we don't have a second one
@@ -109,11 +135,15 @@ lemlib::OdomSensors sensors(&right, // vertical tracking wheel
 );
 
 
+
+
 // input curve for throttle input during driver control
 lemlib::ExpoDriveCurve throttleCurve(3, // joystick deadband out of 127
                                      10, // minimum output where drivetrain will move out of 127
                                      1.019 // expo curve gain
 );
+
+
 
 
 //input curve for steer input during driver control
@@ -123,13 +153,23 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 );
 
 
+
+
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearcontroller, angularcontroller, sensors, &throttleCurve, &steerCurve);
 
 
 
 
+
+
+
+
 touchscreen::screen* activeScreen;
+
+
+
+
 
 
 
@@ -142,6 +182,8 @@ touchscreen::screen* activeScreen;
  */
 
 
+
+
  void initialize() {
      pros::lcd::initialize();
      
@@ -149,10 +191,14 @@ touchscreen::screen* activeScreen;
      retainerPiston.set_value(true); // start with retainer down
 
 
+
+
      activeScreen=touchscreen::autonScreen;
      
      
     pros::screen::touch_callback([](){activeScreen->onPress();}, pros::last_touch_e_t::E_TOUCH_RELEASED);
+
+
 
 
     std::printf("smeggy \n");
@@ -173,12 +219,18 @@ touchscreen::screen* activeScreen;
     // If you use bluetooth or a wired connection, you will want to have a rate of 10ms
 
 
+
+
     // for more information on how the formatting for the loggers
     // works, refer to the fmtlib docs
 
 
+
+
     // thread to for brain screen and position logging
 }
+
+
 
 
 /**
@@ -188,18 +240,26 @@ void disabled() {
 }
 
 
+
+
 /**
  * runs after initialize if the robot is connected to field control
  */
 void competition_initialize() {}
 
 
+
+
 // get a path used for pure pursuit
+
+
 
 
 // this needs to be put outside a function
 ASSET(susdiddytuahohioblud_txt); // '.' replaced with "_" to make c++ happy
 ASSET(tuah_txt); // '.' replaced with "_" to make c++ happy
+
+
 
 
 void ram(float speed){
@@ -211,6 +271,8 @@ void ram(float speed){
    
     leftMotors.brake();
 }
+
+
 
 
 /**
@@ -253,7 +315,11 @@ void autonomous() {
     //     });
 
 
+
+
     chassis.setPose(0, 0, 0);
+
+
 
 
     std::printf("gurt\n");
@@ -275,10 +341,18 @@ void autonomous() {
     // if(1){
 
 
+
+
     //NEW WP
 
 
+
+
     //1st loader
+
+
+
+
 
 
 
@@ -302,6 +376,8 @@ void autonomous() {
     //     retainerPiston.set_value(false);
     //     LeftIntake.move_velocity(600);
     //     RightIntake.move_velocity(600);
+
+
 
 
     //     pros::delay(1300);
@@ -353,6 +429,12 @@ void autonomous() {
 
 
 
+
+
+
+
+
+
         // chassis.moveToPose(-24.7 ,-41.2, 171.3,5000,{.minSpeed=30});
         // chassis.moveToPose(-22.1 ,-40.2, 144.6,5000,{.minSpeed=30});
         // chassis.moveToPose(5.365 ,-85.7, 146.5,5000,{.minSpeed=30});
@@ -362,7 +444,13 @@ void autonomous() {
 
 
 
+
+
+
+
     //OLD  SIG WP
+
+
 
 
         //go to loader
@@ -371,11 +459,12 @@ void autonomous() {
         chassis.moveToPoint(0, 33.5, 2000,{.maxSpeed=127,.minSpeed=52});
         tonguePiston.set_value(true);
         chassis.turnToHeading(-90, 750);
-        chassis.moveToPoint(-20.75, 28.5, 4000,{.maxSpeed=127,.minSpeed=52});
+        chassis.moveToPoint(-21.25, 28.5, 4000,{.maxSpeed=127,.minSpeed=52});
         pros::delay(1085);
 
+
         //go to long goal
-        chassis.moveToPoint(9, 27.67, 1750,{.forwards=false,.maxSpeed=127,.minSpeed=80});
+        chassis.moveToPoint(8, 28, 1750,{.forwards=false,.maxSpeed=127,.minSpeed=80});
         // LeftIntake.move_velocity(600);
         // RightIntake.move_velocity(600);
         // pros::delay(1000);
@@ -388,6 +477,7 @@ void autonomous() {
         RightIntake.move_velocity(600);
         pros::delay(1050);
 
+
         //collect cluster
         wingPiston.set_value(true);
         tonguePiston.set_value(false);
@@ -399,9 +489,10 @@ void autonomous() {
         tonguePiston.set_value(true);
         pros::delay(250);
 
+
         //go to middle
         chassis.turnToHeading(-55, 750);
-        chassis.moveToPoint(32.75, -6,2000,{.forwards=false,.maxSpeed=127,.minSpeed=53});
+        chassis.moveToPoint(29, -0.9,2000,{.forwards=false,.maxSpeed=127,.minSpeed=53});
         pros::delay(300);
         // tonguePiston.set_value(true);
         LeftIntake.move_velocity(-300);
@@ -415,24 +506,25 @@ void autonomous() {
         middlePiston.set_value(false);
         tonguePiston.set_value(false);
         // retainerPiston.set_value(true);
-        
+       
         //collect second cluster
-        chassis.moveToPoint(24.5, -2,1500,{.maxSpeed=127,.minSpeed=65});
+        chassis.moveToPoint(24.25, 2,1500,{.maxSpeed=127,.minSpeed=65});
         chassis.turnToHeading(180, 750);
-        chassis.moveToPoint(27.75, -52, 2000,{.maxSpeed=127,.minSpeed=65});
+        chassis.moveToPoint(24.75, -52, 2000,{.maxSpeed=127,.minSpeed=65});
         pros::delay(800);
         tonguePiston.set_value(true);
+
 
         //low goal
         // pros::delay(250);
         chassis.turnToHeading(45, 850);
         tonguePiston.set_value(false);
-        chassis.moveToPoint(46.25, -30.5, 2000, {.maxSpeed=127,.minSpeed=55});
+        chassis.moveToPoint(45.5, -30, 2000, {.maxSpeed=127,.minSpeed=55});
         pros::delay(500);
         tonguePiston.set_value(true);
         LeftIntake.move_velocity(-55);
         RightIntake.move_velocity(-55);
-        
+       
         // chassis.moveToPoint(27, 5,2000,{.maxSpeed=127,.minSpeed=67});
         // chassis.turnToHeading(-180, 1000,{.minSpeed=50});
         // chassis.moveToPoint(25, 5-48,2000,{.maxSpeed=127,.minSpeed=67});
@@ -460,13 +552,20 @@ void autonomous() {
         // chassis.moveToPose(34.785660, -70.40437, -104.48307,2000,{.maxSpeed=127,.minSpeed=50});
         // chassis.moveToPose(25.481079, -26.63905, -18.461731,2000,{.maxSpeed=127,.minSpeed=50});
 
+
     }
+
+
+
+
 
 
 
 
     // NEW LEFT SIDE
     else if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(0))->getState()){
+
+
 
 
     //go to loader
@@ -477,6 +576,7 @@ void autonomous() {
         chassis.turnToHeading(-90, 1000);
         chassis.moveToPoint(-20.75, 28.5, 4000,{.maxSpeed=127,.minSpeed=50});
         pros::delay(1100);
+
 
         //go to long goal
         chassis.moveToPoint(9, 27.67, 1750,{.forwards=false,.maxSpeed=127,.minSpeed=50});
@@ -492,20 +592,22 @@ void autonomous() {
         RightIntake.move_velocity(600);
         pros::delay(1350);
 
+
         //collect cluster
         wingPiston.set_value(true);
         tonguePiston.set_value(false);
         retainerPiston.set_value(true);
         chassis.moveToPoint(-2, 29, 4000,{.forwards=true,.maxSpeed=127,.minSpeed=50});
-        chassis.turnToPoint(29, -4,1000,{.maxSpeed=127});
-        chassis.moveToPoint(29, -4,2000,{.maxSpeed=127,.minSpeed=50});
+        chassis.turnToPoint(29, -1,1000,{.maxSpeed=127});
+        chassis.moveToPoint(29, -1,2000,{.maxSpeed=127,.minSpeed=50});
         pros::delay(850);
         tonguePiston.set_value(true);
         pros::delay(350);
 
+
         //go to middle
         chassis.turnToHeading(-55, 1000);
-        chassis.moveToPoint(32.5, -5.9,2000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
+        chassis.moveToPoint(29, -0.75,2000,{.forwards=false,.maxSpeed=127,.minSpeed=50});
         pros::delay(300);
         // tonguePiston.set_value(true);
         LeftIntake.move_velocity(-300);
@@ -525,6 +627,10 @@ void autonomous() {
 
 
 
+
+
+
+
     // NEW RIGHT SIDE
     else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState())){
     // Moves to collect the cluster of three blocks
@@ -537,6 +643,8 @@ void autonomous() {
     pros::delay(750);
 
 
+
+
     // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
     // tonguePiston.set_value(false);
     chassis.turnToPoint(37.547, -8.75, 1000);
@@ -546,11 +654,15 @@ void autonomous() {
     pros::delay(500);
 
 
+
+
     // Moves into the loader to unload and store the alliance's three colored blocks
     chassis.moveToPoint(35.5, -23.500, 1250, {.forwards=true,.maxSpeed=127,.minSpeed=50});
     // chassis.moveToPose(35.229, -23.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
     // chassis.moveToPose(35.229, -24.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
     pros::delay(1200);
+
+
 
 
     // Moves to long goal to score the three blocks from the loader
@@ -578,6 +690,8 @@ void autonomous() {
     // RightIntake.move_velocity(600);
     // pros::delay(1500);
     // // Lines up the wing and gets control zone in long goal
+
+
 
 
    
@@ -679,6 +793,10 @@ void autonomous() {
 
 
 
+
+
+
+
     // Move Backwards
     else if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(3))->getState()){
         chassis.moveToPoint(0, -8, 100000, {.forwards=false,.maxSpeed=127,.minSpeed=55});
@@ -687,13 +805,23 @@ void autonomous() {
 
 
 
+
+
+
+
     // NEW SKILLS
     else if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(4))->getState()){
+
+
 
 
     // chassis.moveToPose(0, 24, 0, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
     // chassis.moveToPoint(0, 24, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
     // chassis.turnToHeading(90, 9000);
+
+
+
+
 
 
 
@@ -707,6 +835,8 @@ void autonomous() {
     // chassis.turnToHeading(180, 1000);
 
 
+
+
     tonguePiston.set_value(true);
     chassis.moveToPose(35.750, -24.000, 180.000, 3500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     // chassis.moveToPose(34.900, -29.000, 180.000, 750, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=40});
@@ -718,11 +848,15 @@ void autonomous() {
     tonguePiston.set_value(false);
 
 
+
+
     chassis.turnToHeading(-90, 1000);
     chassis.moveToPose(24.600, -10.000, -90.000, 1000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     chassis.moveToPose(24.000, 30.731, 2.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
     chassis.moveToPose(24.000, 74.731, 2.000, 3000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=40});
     chassis.turnToHeading(45, 1000);
+
+
 
 
     chassis.moveToPose(44.000, 90.731, 0.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
@@ -741,10 +875,14 @@ void autonomous() {
     retainerPiston.set_value(true);
 
 
+
+
     chassis.moveToPose(38.600, 112.150, 2.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     chassis.moveToPose(38.600, 111.150, 2.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     chassis.moveToPose(38.600, 112.150, 2.000, 2000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
     pros::delay(2000);
+
+
 
 
     chassis.moveToPose(37.850, 71.800, 0.000, 2500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
@@ -766,6 +904,8 @@ void autonomous() {
     tonguePiston.set_value(false);
 
 
+
+
     wingPiston.set_value(true);
     LeftIntake.move_velocity(0);
     RightIntake.move_velocity(0);
@@ -773,6 +913,8 @@ void autonomous() {
     // chassis.moveToPose(-13.247, 81.731, -90.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
     // chassis.moveToPose(-58.247, 82.731, -90.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
     // tonguePiston.set_value(true);
+
+
 
 
     // LeftIntake.move_velocity(600);
@@ -791,6 +933,8 @@ void autonomous() {
     // tonguePiston.set_value(false);
 
 
+
+
     // LeftIntake.move_velocity(0);
     // RightIntake.move_velocity(0);
     // chassis.moveToPose(-53.047, 77.731, 1.000, 2500, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=35});
@@ -798,8 +942,12 @@ void autonomous() {
     // chassis.moveToPose(-45.247, 77.731, 90.000, 1000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
 
 
+
+
     // chassis.moveToPose(-45.247, 55.731, 165.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
     // chassis.moveToPose(-45.247, 4.731, 169.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
+
+
 
 
     // chassis.moveToPose(-55.247, -3.731, 163.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
@@ -816,6 +964,8 @@ void autonomous() {
     // retainerPiston.set_value(true);
 
 
+
+
     // chassis.moveToPose(-55.247, -22.731, 163.000, 4000, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=30});
     // chassis.moveToPose(-55.247, 10.731, 140.000, 4000, {.forwards=false,.lead=0,.maxSpeed=127,.minSpeed=30});
     // retainerPiston.set_value(false);
@@ -830,8 +980,12 @@ void autonomous() {
     // tonguePiston.set_value(false);
 
 
+
+
     // chassis.moveToPose(-30.247, -28.731, 139.000, 4000, {.forwards=true,.maxSpeed=127,.minSpeed=30});
     // chassis.moveToPose(-48.247, -7.731, 140.000, 4000, {.forwards=false,.maxSpeed=127,.minSpeed=30});
+
+
 
 
     chassis.moveToPose(35.500, 83.500, 3.000, 2500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=35});
@@ -847,6 +1001,8 @@ void autonomous() {
     }
 
 
+
+
     else{
     LeftIntake.move_velocity(600);
     RightIntake.move_velocity(600);
@@ -856,17 +1012,15 @@ void autonomous() {
 }
 
 
+
+
 /**
  * Runs in driver control
  */
-
-
-
-
-
-
 int tankState=0;
 void opcontrol() {
+
+
 
 
     chassis.cancelAllMotions();
@@ -882,8 +1036,12 @@ void opcontrol() {
         float j3=controller.get_analog(ANALOG_LEFT_Y);
 
 
+
+
         leftMotors.move(j3+j1);
         rightMotors.move(j3-j1);
+
+
 
 
         if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_POWER)){
@@ -899,11 +1057,15 @@ void opcontrol() {
            
 
 
+
+
         //move blocks up
         if(controller.get_digital(DIGITAL_R1)){
             LeftIntake.move(94);
             RightIntake.move(94);
         }
+
+
 
 
         //move blocks down
@@ -913,6 +1075,8 @@ void opcontrol() {
         }
 
 
+
+
         //stop intake
         if(controller.get_digital(DIGITAL_RIGHT)){
             LeftIntake.brake();
@@ -920,8 +1084,16 @@ void opcontrol() {
         }
 
 
+
+
         pros::delay(50);
     }
 }
+
+
+
+
+
+
 
 
