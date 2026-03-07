@@ -716,7 +716,6 @@ void autonomous() {
 
     //Stupid freaky smeg right side
     else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(5))->getState())){
-    // Moves to collect the cluster of three blocks
     wingPiston.set_value(true);
     retainerPiston.set_value(true);
     LeftIntake.move_velocity(600);
@@ -724,6 +723,8 @@ void autonomous() {
     chassis.moveToPoint(0, 12, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
     // tonguePiston.set_value(true);
     pros::delay(750);
+
+
 
 
     // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
@@ -735,11 +736,15 @@ void autonomous() {
     pros::delay(500);
 
 
+
+
     // Moves into the loader to unload and store the alliance's three colored blocks
     chassis.moveToPoint(35.5, -23.500, 1250, {.forwards=true,.maxSpeed=127,.minSpeed=50});
     // chassis.moveToPose(35.229, -23.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
     // chassis.moveToPose(35.229, -24.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
     pros::delay(1200);
+
+
 
 
     // Moves to long goal to score the three blocks from the loader
@@ -767,6 +772,8 @@ void autonomous() {
     // RightIntake.move_velocity(600);
     // pros::delay(1500);
     // // Lines up the wing and gets control zone in long goal
+
+
 
 
    
