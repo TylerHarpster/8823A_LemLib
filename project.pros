@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "ODOM :)",
+    "project_name": "old hwk tuah goon code",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -82,8 +82,8 @@
       }
     },
     "upload_options": {
-      "icon": "pizza",
-      "slot": 1,
+      "icon": "planet",
+      "slot": 3,
       "description": "My Project"
     },
     "use_early_access": false

@@ -526,7 +526,7 @@ void autonomous() {
 
 
     // NEW RIGHT SIDE
-    else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState()) || true){
+    else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(1))->getState())){
     // Moves to collect the cluster of three blocks
     wingPiston.set_value(true);
     retainerPiston.set_value(true);
@@ -599,6 +599,82 @@ void autonomous() {
     // wingPiston.set_value(false);
     // chassis.moveToPose(22.325, 23.377, 159.279, 9000, {.forwards=false,.maxSpeed=127,.minSpeed=20});
     }
+
+    //Stupid freaky smeg right side
+    else if((std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(5))->getState())){
+    // Moves to collect the cluster of three blocks
+    wingPiston.set_value(true);
+    retainerPiston.set_value(true);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    chassis.moveToPoint(0, 12, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
+    // tonguePiston.set_value(true);
+    pros::delay(750);
+
+
+    // Move to point in between the loader and long goal, then turn to line up with the loader and extend the tongue
+    // tonguePiston.set_value(false);
+    chassis.turnToPoint(37.547, -8.75, 1000);
+    chassis.moveToPoint(37.547, -8.750, 2000, {.forwards=true,.maxSpeed=127,.minSpeed=45});
+    tonguePiston.set_value(true);
+    chassis.turnToHeading(180.000, 1500);
+    pros::delay(500);
+
+
+    // Moves into the loader to unload and store the alliance's three colored blocks
+    chassis.moveToPoint(35.5, -23.500, 1250, {.forwards=true,.maxSpeed=127,.minSpeed=50});
+    // chassis.moveToPose(35.229, -23.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
+    // chassis.moveToPose(35.229, -24.000, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=45});
+    pros::delay(1200);
+
+
+    // Moves to long goal to score the three blocks from the loader
+    // LeftIntake.move_velocity(-400);
+    // RightIntake.move_velocity(-400);
+    // pros::delay(100);
+    // LeftIntake.move_velocity(600);
+    // RightIntake.move_velocity(600);
+    chassis.moveToPoint(37, 10.000, 2000, {.forwards=false,.maxSpeed=127,.minSpeed=50});
+    // tonguePiston.set_value(false);
+    pros::delay(500);
+    pros::delay(500);
+    retainerPiston.set_value(false);
+    pros::delay(1000);
+    LeftIntake.move_velocity(-400);
+    RightIntake.move_velocity(-400);
+    pros::delay(250);
+    LeftIntake.move_velocity(600);
+    RightIntake.move_velocity(600);
+    pros::delay(1500);
+    // LeftIntake.move_velocity(-400);
+    // RightIntake.move_velocity(-400);
+    // pros::delay(250);
+    // LeftIntake.move_velocity(600);
+    // RightIntake.move_velocity(600);
+    // pros::delay(1500);
+    // // Lines up the wing and gets control zone in long goal
+
+
+   
+    chassis.moveToPoint(37, -16, 1000,{.minSpeed=50});
+    wingPiston.set_value(false);
+    chassis.turnToHeading(135, 1000);
+    chassis.moveToPoint(34, 0,4000,{.forwards=false,.minSpeed=50});
+    chassis.turnToHeading(183, 750);
+    chassis.moveToPoint(34.5, 27,4000,{.forwards=false,.minSpeed=50});
+    // chassis.moveToPose(20.777630, 13.49215, 177.465729,10000,{.forwards=false,.minSpeed=30});
+    // chassis.moveToPose(20.315542, 24.59947, 176.855530,10000,{.forwards=false,.minSpeed=30});
+    // chassis.moveToPose(20.183004, 26.82297, 177.199905,10000,{.forwards=false,.minSpeed=30});
+   
+   
+   
+    // chassis.moveToPose(35.229, -13.900, 179.504, 1500, {.forwards=true,.lead=0,.maxSpeed=127,.minSpeed=50});
+    // chassis.moveToPose(24.325, 14.377, 168.279, 9000, {.forwards=false,.maxSpeed=127,.minSpeed=20});
+    // chassis.moveToPose(22.000, 18.377, 168.279, 9000, {.forwards=false,.maxSpeed=127,.minSpeed=20});
+    // wingPiston.set_value(false);
+    // chassis.moveToPose(22.325, 23.377, 159.279, 9000, {.forwards=false,.maxSpeed=127,.minSpeed=20});
+    }
+
 
 
 

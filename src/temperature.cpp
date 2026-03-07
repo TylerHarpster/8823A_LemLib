@@ -84,7 +84,7 @@ namespace touchscreen{
                         {
                             .strokeWeight=0,
                             .text="Win point",
-                            .fillColor=0x00ddddaa
+                            .fillColor=0x00ddaadd
                             
                         }
         
@@ -127,6 +127,27 @@ namespace touchscreen{
                             .strokeWeight=0,
                             .text="Skills",
                             .fillColor=0x00001ff0
+                        }
+        
+                    ),
+                    new button(
+                        280,
+                        70,
+                        200,
+                        50,
+                        [](button* self){
+                            self->setStrokeWeight(5);
+                            self->setState(1);
+                        },
+                        [](button* self){
+                            self->setStrokeWeight(0);
+                            self->setState(0);
+                        },
+                        {
+                            .strokeWeight=0,
+                            .text="Stupid Smeg Right Side",
+                            .fillColor=0x00A000A1,
+        
                         }
         
                     ),
