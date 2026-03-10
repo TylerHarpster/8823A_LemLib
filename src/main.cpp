@@ -819,7 +819,7 @@ void autonomous() {
     // NEW SKILLS
     else if(std::get<touchscreen::button*>(touchscreen::autonScreen->getObjects().at(4))->getState()){
 
-
+    chassis.setPose(0,1.15,0);
 
 
     // chassis.moveToPose(0, 24, 0, 9000, {.forwards=true,.maxSpeed=127,.minSpeed=35});
